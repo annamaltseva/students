@@ -43,7 +43,7 @@ class Subject extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Наименование',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

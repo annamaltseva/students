@@ -49,7 +49,7 @@ AppAsset::register($this);
                     ['label' => 'Предметы', 'url' => ['/subject/index']],
                     ['label' => 'Аттестации', 'url' => ['/attestation/index']],
                     ['label' => 'Методы оценки', 'url' => ['/rating/index']],
-                    ['label' => 'Формы контроля', 'url' => ['/checkout-form/index']],
+                    ['label' => 'Уровни компетенции', 'url' => ['/competence-level/index']],
                 ],
             ],
             [

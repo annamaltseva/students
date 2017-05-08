@@ -5,23 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "rating".
+ * This is the model class for table "competence_level".
  *
  * @property integer $id
  * @property string $name
+ * @property integer $level_value
+ * @property integer $order_field
  * @property integer $created_at
  * @property integer $updated_at
- *
- * @property Checkout[] $checkouts
  */
-class Rating extends \yii\db\ActiveRecord
+class CompetenceLevel extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'rating';
+        return 'competence_level';
     }
 
     /**
@@ -30,8 +30,8 @@ class Rating extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['created_at', 'updated_at'], 'integer'],
+            [['name', 'level_value'], 'required'],
+            [['level_value', 'order_field', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -44,16 +44,10 @@ class Rating extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Наименование',
+            'level_value' => 'Level Value',
+            'order_field' => 'Order Field',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCheckouts()
-    {
-        return $this->hasMany(Checkout::className(), ['rating_id' => 'id']);
     }
 }

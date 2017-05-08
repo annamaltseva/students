@@ -48,8 +48,8 @@ class Student extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'group_id' => 'Group ID',
+            'name' => 'Наименование',
+            'group_id' => 'Группа',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
