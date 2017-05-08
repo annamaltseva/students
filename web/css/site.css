@@ -113,3 +113,40 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.navbar-inverse{
+    background-color: #fff;
+    border-color: #fff;
+}
+.logo__img {
+    width: 250px;
+}
+a.navbar-brand{
+    height: auto;
+}
+.container {
+    border-bottom: 1px solid #eaeaea;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16);
+}
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus
+{
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #fafafa, #f0f0f0) repeat scroll 0 0;
+    color: #21a649;
+    border-bottom: 4px solid #21a649;
+}
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #fafafa, #f0f0f0) repeat scroll 0 0;
+    color: #21a649;
+}
+
+
+.navbar-inverse .navbar-nav > li > a:hover:before {
+    animation: 0.3s ease 0s normal forwards 1 running jump-horizontal;
+    background: #21a649 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 4px;
+    left: 0;
+    position: absolute;
+    right: 0;
+}
