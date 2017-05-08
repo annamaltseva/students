@@ -44,7 +44,7 @@ class CheckoutForm extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Наименование',
             'order_field' => 'Order Field',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

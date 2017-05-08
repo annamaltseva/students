@@ -1,10 +1,7 @@
 <?php
 use yii\grid\GridView;
-$this->title = "Учебные года";
+$this->title = "Формы контроля";
 ?>
-<div class="col-md-12">
-    <a href="" class="printBtn">Добавить</a>
-</div>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
@@ -14,6 +11,5 @@ $this->title = "Учебные года";
         ],
         'name',
 
-        //['class' => 'yii\grid\ActionColumn'],
     ],
 ]); ?>

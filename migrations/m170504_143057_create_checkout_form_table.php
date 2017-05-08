@@ -45,12 +45,6 @@ class m170504_143057_create_checkout_form_table extends Migration
             'updated_at' => strtotime("now"),
         ]);
         $this->insert('checkout_form', [
-            'name' => 'РГР',
-            'order_field' => 4,
-            'created_at' => strtotime("now"),
-            'updated_at' => strtotime("now"),
-        ]);
-        $this->insert('checkout_form', [
             'name' => 'Курсовая работа',
             'order_field' => 5,
             'created_at' => strtotime("now"),
