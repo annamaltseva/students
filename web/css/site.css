@@ -3,6 +3,12 @@ body {
     height: 100%;
 }
 
+body {
+   font-family: Ubuntu, Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #464646;
+}
 .wrap {
     min-height: 100%;
     height: auto;
@@ -134,7 +140,9 @@ a.navbar-brand{
     color: #21a649;
     border-bottom: 4px solid #21a649;
 }
-.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus,
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus
+{
     background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #fafafa, #f0f0f0) repeat scroll 0 0;
     color: #21a649;
 }
@@ -150,3 +158,29 @@ a.navbar-brand{
     position: absolute;
     right: 0;
 }
+h1{
+    float: left;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 20px;
+    text-transform: uppercase;
+    width: 200px;
+}
+
+.printBtn {
+    float: right;
+    margin: 0 15px;
+    padding: 10px 16px;
+    cursor: pointer;
+    display: block;
+    font-size: 12pt;
+    text-decoration: none !important;
+    color: #fff !important;
+    background: #46c765;
+    border-color: #46c765;
+}
+
+.printBtn:hover {
+    background: #32a54e;
+}
+

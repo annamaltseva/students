@@ -56,4 +56,11 @@ class Year extends \yii\db\ActiveRecord
     {
         return $this->hasMany(YearAttestation::className(), ['year_id' => 'id']);
     }
+
+    public static function getAll()
+    {
+        $query = self::find();
+        return $query->all();
+    }
+
 }

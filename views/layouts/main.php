@@ -33,10 +33,32 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    ?>
+    <div style="width:200px;border:0px solid red;float:left;">
+    <h1><?= Html::encode($this->title) ?></h1>
+    </div>
+    <?php
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            [
+                'label' => 'Справочники',
+                'items' => [
+                    ['label' => 'Учебные года', 'url' => ['/year/index']],
+                    ['label' => 'Формы контроля', 'url' => ['/checkout-form/index']],
+                    ['label' => 'Предметы', 'url' => ['/subject/index']],
+                    ['label' => 'Аттестации', 'url' => ['/attestation/index']],
+                    ['label' => 'Методы оценки', 'url' => ['/rating/index']],
+                    ['label' => 'Уровни оценки компетенции', 'url' => ['/rating/index']],
+                ],
+            ],
+            [
+                'label' => 'Студенты',
+                'items' => [
+                    ['label' => 'Группы', 'url' => ['/year/index']],
+                    ['label' => 'Студенты', 'url' => ['/checkout-form/index']],
+                ],
+            ],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
@@ -56,7 +78,7 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container"  style="margin-top:60px">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
