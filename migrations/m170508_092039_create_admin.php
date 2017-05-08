@@ -3,18 +3,18 @@
 use yii\db\Migration;
 use app\models\User;
 
-class m170505_114821_create_admin extends Migration
+class m170508_092039_create_admin extends Migration
 {
-
-
     // Use safeUp/safeDown to run migration code within a transaction
     public function safeUp()
     {
         $user = new User();
         $user->attributes = [
+            'id' => 1,
             'email' => 'admin@admin.com',
             'username' => 'Админ',
             'auth_key' => '5htkQZVMtCvnkzt-MbEF67xLnjGf0s4j',
+            'is_admin' => 1
         ];
         $user->generateAuthKey();
         $user->setPassword('admin');
@@ -28,5 +28,4 @@ class m170505_114821_create_admin extends Migration
     {
         User::deleteAll();
     }
-
 }
