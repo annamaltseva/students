@@ -25,15 +25,22 @@ $this->title = "Группы студентов";
         [
             'attribute' => 'created_at',
             'format'    => [ 'date', 'php:d.m.Y' ],
-            'contentOptions' => ['style' => 'width:50px;'],
+            'contentOptions' => ['style' => 'width:100px;'],
             'label' =>'Добавлена'
         ],
         [
             'attribute' => 'updated_at',
             'format'    => [ 'date', 'php:d.m.Y' ],
             'label' =>'Изменена',
-            'contentOptions' => ['style' => 'width:50px;']
+            'contentOptions' => ['style' => 'width:100px;']
         ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{update}',
+            'header' => 'Действия',
+            'contentOptions' => ['style' => 'width:100px;']
+        ]
+
     ],
     'tableOptions' => [
         'class' => 'table table-striped table-bordered table-hover'
