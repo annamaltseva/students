@@ -12,7 +12,8 @@ class m170508_092039_create_admin extends Migration
         $user->attributes = [
             'id' => 1,
             'email' => 'admin@admin.com',
-            'username' => 'Админ',
+            'username' => 'admin',
+            'name' => 'Администратор',
             'auth_key' => '5htkQZVMtCvnkzt-MbEF67xLnjGf0s4j',
             'is_admin' => 1
         ];

@@ -13,6 +13,7 @@ class m170508_085114_add_is_admin_column_to_user_table extends Migration
     public function up()
     {
         $this->addColumn('user', 'is_admin', $this->integer()->defaultValue(0));
+        $this->addColumn('user', 'name', $this->string()->notNull());
     }
 
     /**
@@ -21,5 +22,6 @@ class m170508_085114_add_is_admin_column_to_user_table extends Migration
     public function down()
     {
         $this->dropColumn('user', 'is_admin');
+        $this->dropColumn('user', 'name');
     }
 }

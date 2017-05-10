@@ -60,6 +60,7 @@ class User extends ActiveRecord implements IdentityInterface
                     'password_hash',
                     'email',
                     'username',
+                    'name',
                 ],
                 'required'
             ],
@@ -69,6 +70,7 @@ class User extends ActiveRecord implements IdentityInterface
                     'password_hash',
                     'email',
                     'username',
+                    'name',
                 ],
                 'string',
                 'max' => 255
