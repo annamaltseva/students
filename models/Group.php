@@ -36,6 +36,7 @@ class Group extends \yii\db\ActiveRecord
             TimestampBehavior::className(),
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -86,4 +87,11 @@ class Group extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Student::className(), ['group_id' => 'id']);
     }
+
+    public static function getAll()
+    {
+        $query = self::find();
+        return $query->all();
+    }
+
 }
