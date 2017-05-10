@@ -55,8 +55,8 @@ AppAsset::register($this);
             [
                 'label' => 'Студенты',
                 'items' => [
-                    ['label' => 'Группы', 'url' => ['/year/index']],
-                    ['label' => 'Студенты', 'url' => ['/checkout-form/index']],
+                    ['label' => 'Группы', 'url' => ['/group/index']],
+                    ['label' => 'Студенты', 'url' => ['/student/index']],
                 ],
             ],
             ['label' => 'About', 'url' => ['/site/about']],
