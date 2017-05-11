@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Group;
+use app\models\Year;
+use app\models\Attestation;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
@@ -10,9 +11,9 @@ use yii\helpers\ArrayHelper;
 /* @var $form yii\widgets\ActiveForm */
 
 if ($model->isNewRecord) {
-    $this->title = "Добавление студента";
+    $this->title = "Добавление аттестации на год";
 } else {
-    $this->title = "Изменение студента";
+    $this->title = "Изменение аттестации на год";
 }
 ?>
 
@@ -20,11 +21,16 @@ if ($model->isNewRecord) {
     <div class="col-md-6 col-sm-12 col-xs-12">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'name')->textInput() ?>
-    <?= $form->field($model, 'group_id')
-        ->dropDownList(ArrayHelper::map(Group::getAll(), 'id', 'name'), [
+    <?= $form->field($model, 'year_id')
+        ->dropDownList(ArrayHelper::map(Year::getAll(), 'id', 'name'), [
             'class'=>'form-control',
-            'prompt' => 'Выберите группу ...'
+            'prompt' => 'Выберите год ...'
+        ]);
+    ?>
+    <?= $form->field($model, 'attestation_id')
+        ->dropDownList(ArrayHelper::map(Attestation::getAll(), 'id', 'name'), [
+            'class'=>'form-control',
+            'prompt' => 'Выберите аттестацию ...'
         ]);
     ?>
     <div class="form-group">
@@ -34,5 +40,6 @@ if ($model->isNewRecord) {
     </div>
 
     <?php ActiveForm::end(); ?>
+
     </div>
 </div>

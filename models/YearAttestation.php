@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\behaviors\TimestampBehavior;
 use Yii;
 
 /**
@@ -32,6 +33,17 @@ class YearAttestation extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -43,6 +55,11 @@ class YearAttestation extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeValidate() {
+        $this->user_id = Yii::$app->user->identity->id;
+        return parent::beforeValidate();
+    }
+
     /**
      * @inheritdoc
      */
@@ -50,8 +67,8 @@ class YearAttestation extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'year_id' => 'Year ID',
-            'attestation_id' => 'Attestation ID',
+            'year_id' => 'Год',
+            'attestation_id' => 'Аттестация',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

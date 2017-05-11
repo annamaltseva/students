@@ -14,8 +14,8 @@ if ($model->isNewRecord) {
 }
 ?>
 
-<div class="person-form">
-
+<div class="row">
+    <div class="col-md-6 col-sm-12 col-xs-12">
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'name')->textInput() ?>
@@ -25,5 +25,5 @@ if ($model->isNewRecord) {
     </div>
 
     <?php ActiveForm::end(); ?>
-
+    </div>
 </div>

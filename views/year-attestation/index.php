@@ -1,14 +1,15 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
-$this->title = "Студенты";
+use app\models\User;
+use yii\helpers\Url;
+$this->title = "Аттестации по годам";
 ?>
-    <div class="row">
-        <div class="col-md-12">
-            <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
     </div>
-
+</div>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
@@ -16,12 +17,19 @@ $this->title = "Студенты";
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => ['style' => 'width:50px;']
         ],
-        'name',
-
+        [
+            'attribute' => 'year.name',
+            'label' =>'Год'
+        ],
+        [
+            'attribute' => 'attestation.name',
+            'label' =>'Аттестация'
+        ],
         [
             'attribute' => 'user.name',
             'label' =>'Добавил'
         ],
+
         [
             'attribute' => 'created_at',
             'format'    => [ 'date', 'php:d.m.Y' ],
@@ -36,9 +44,9 @@ $this->title = "Студенты";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {delete}',
+            'template' => '{update} {delete} ',
             'header' => 'Действия',
-            'contentOptions' => ['style' => 'width:100px;']
+            'contentOptions' => ['style' => 'width:100px;'],
         ]
     ],
     'tableOptions' => [
