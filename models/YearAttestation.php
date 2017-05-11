@@ -52,6 +52,7 @@ class YearAttestation extends \yii\db\ActiveRecord
             [['attestation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Attestation::className(), 'targetAttribute' => ['attestation_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['year_id'], 'exist', 'skipOnError' => true, 'targetClass' => Year::className(), 'targetAttribute' => ['year_id' => 'id']],
+            [['year_id', 'attestation_id'], 'unique', 'targetAttribute' => ['year_id', 'attestation_id']]
         ];
     }
 
