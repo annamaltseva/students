@@ -15,6 +15,7 @@ use yii\helpers\Url;
  *
  * @property integer $id
  * @property string $username
+ * @property string $name
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -83,10 +84,27 @@ class User extends ActiveRecord implements IdentityInterface
                 'integer',
             ],
 
+            ['username', 'unique'],
+
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'email' => 'Электронная почта',
+            'name' => 'ФИО преподавателя',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
 
     /**
      * @inheritdoc
@@ -219,14 +237,28 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+
     /**
-     * Get user profile url
+     * Get user status
      */
-    public static function getUserProfileUrl()
+    public static function getUserStatus($id)
     {
-        return Url::to([
-            '/pwdstore/user/'.Yii::$app->user->identity->username
-        ]);
+        $result = [
+            self::STATUS_DELETED => "Удален",
+            self::STATUS_ACTIVE => "Активный"
+        ];
+        if (array_key_exists($id, $result)) {
+            return $result[$id];
+        } else {
+            return $result;
+        }
     }
 
+    /**
+     * Get Teachers
+     */
+    public static function getTeachers()
+    {
+        return self::find()->where(['is_admin' => 0 ]);
+    }
 }

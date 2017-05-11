@@ -19,7 +19,7 @@ $this->title = "Группы студентов";
         'name',
 
         [
-            'attribute' => 'user.username',
+            'attribute' => 'user.name',
             'label' =>'Добавил'
         ],
         [
