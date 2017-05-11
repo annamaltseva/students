@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "checkout".
@@ -40,6 +41,17 @@ class Checkout extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -61,17 +73,23 @@ class Checkout extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'year_attestation_id' => 'Year Attestation ID',
-            'subject_id' => 'Subject ID',
-            'checkout_form_id' => 'Checkout Form ID',
-            'quantity' => 'Quantity',
-            'rating_id' => 'Rating ID',
+            'year_attestation_id' => 'Аттестация',
+            'subject_id' => 'Предмет',
+            'checkout_form_id' => 'Форма контроля',
+            'quantity' => 'Количество',
+            'rating_id' => 'Метод оценки',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'group_id' => 'Group ID',
+            'group_id' => 'Группа',
         ];
     }
+
+    public function beforeValidate() {
+        $this->user_id = Yii::$app->user->identity->id;
+        return parent::beforeValidate();
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -124,9 +142,9 @@ class Checkout extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCheckoutCompetences()
+    public function getCheckoutWork()
     {
-        return $this->hasMany(CheckoutCompetence::className(), ['checkout_id' => 'id']);
+        return $this->hasMany(CheckoutWork::className(), ['checkout_id' => 'id']);
     }
 
     /**
@@ -135,5 +153,24 @@ class Checkout extends \yii\db\ActiveRecord
     public function getCheckoutResults()
     {
         return $this->hasMany(CheckoutResult::className(), ['checkout_id' => 'id']);
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYear()
+    {
+        return $this->hasOne(Year::className(), ['id' => 'year_id'])
+            ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttestation()
+    {
+        return $this->hasOne(Attestation::className(), ['id' => 'attestation_id'])
+            ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
     }
 }

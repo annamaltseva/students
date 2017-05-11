@@ -56,4 +56,10 @@ class Rating extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Checkout::className(), ['rating_id' => 'id']);
     }
+
+    public static function getAll()
+    {
+        $query = self::find();
+        return $query->all();
+    }
 }

@@ -45,7 +45,7 @@ AppAsset::register($this);
                 'label' => 'Справочники',
                 'items' => [
                     ['label' => 'Учебные года', 'url' => ['/year/index']],
-                    ['label' => 'Формы контроля', 'url' => ['/checkout-form/index']],
+                    ['label' => 'Типы формы контроля', 'url' => ['/checkout-form/index']],
                     ['label' => 'Предметы', 'url' => ['/subject/index']],
                     ['label' => 'Аттестации', 'url' => ['/attestation/index']],
                     ['label' => 'Методы оценки', 'url' => ['/rating/index']],
@@ -63,7 +63,7 @@ AppAsset::register($this);
                 'label' => 'Оценивание',
                 'items' => [
                     ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
-                    ['label' => 'Формы контроля', 'url' => ['/student/index']],
+                    ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
                 ],
             ],
             ['label' => 'Преподаватели', 'url' => ['/teacher/index']],

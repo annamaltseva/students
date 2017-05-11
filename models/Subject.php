@@ -56,4 +56,10 @@ class Subject extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Checkout::className(), ['subject_id' => 'id']);
     }
+
+    public static function getAll()
+    {
+        $query = self::find()->orderBy(['name'=>'desc']);
+        return $query->all();
+    }
 }

@@ -12,7 +12,7 @@ class YearAttestationController extends PrepodController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => YearAttestation::find()->with('year')->with('year')->with('attestation')
+            'query' => YearAttestation::find()->with('year','attestation','user')
         ]);
         return $this->render('index',[
             'dataProvider'=> $dataProvider

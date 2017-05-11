@@ -1,6 +1,6 @@
 <?php
 use yii\grid\GridView;
-$this->title = "Формы контроля";
+$this->title = "Типы форм контроля";
 ?>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,

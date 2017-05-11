@@ -58,4 +58,10 @@ class CheckoutForm extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Checkout::className(), ['checkout_form_id' => 'id']);
     }
+
+    public static function getAll()
+    {
+        $query = self::find();
+        return $query->all();
+    }
 }

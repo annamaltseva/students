@@ -16,6 +16,10 @@ $this->title = "Студенты";
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => ['style' => 'width:50px;']
         ],
+        [
+            'attribute' => 'group.name',
+            'label' =>'Группа'
+        ],
         'name',
 
         [
