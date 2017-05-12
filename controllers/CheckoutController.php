@@ -4,7 +4,8 @@ namespace app\controllers;
 
 use app\models\Checkout;
 use app\models\Student;
-use app\models\YearAttestation;
+use app\models\CheckoutCompetence;
+use app\models\CheckoutWork;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use Yii;
@@ -73,7 +74,7 @@ class CheckoutController extends PrepodController
 
     public function actionWork($id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findWork($id);
         $studentResults = Student::find()->where(['group_id'=>$model->group_id])->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -86,16 +87,108 @@ class CheckoutController extends PrepodController
         }
     }
 
+    public function actionCompetence($id)
+    {
+        $model = $this->findModel($id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => CheckoutCompetence::find()->with('user')->where(['checkout_id' =>$id])
+        ]);
+
+        return $this->render('competence',[
+            'dataProvider'=> $dataProvider,
+            'model' => $model
+        ]);
+    }
+
+    public function actionCreateCompetence($id)
+    {
+
+        $model = $this->findModel($id);
+        $modelCompetence = new CheckoutCompetence();
+        $modelCompetence->checkout_id = $model->id;
+
+        if ($modelCompetence->load(Yii::$app->request->post()) && $modelCompetence->save()) {
+            return $this->redirect(['competence','id' => $model->id]);
+        } else {
+            return $this->render('_competence_form', [
+                'modelCompetence' => $modelCompetence,
+                'model' => $model
+            ]);
+        }
+    }
+
+
+    public function actionUpdateCompetence($id, $competence_id)
+    {
+
+        $model = $this->findModel($id);
+        $modelCompetence = $this->findCompetence($competence_id);
+
+
+        if ($modelCompetence->load(Yii::$app->request->post()) && $modelCompetence->save()) {
+            return $this->redirect(['competence','id' => $model->id]);
+        } else {
+            return $this->render('_competence_form', [
+                'model' => $model,
+                'modelCompetence' => $modelCompetence
+            ]);
+        }
+    }
+
+    public function actionDeleteCompetence($id, $competence_id)
+    {
+
+        $model = $this->findModel($id);
+        $modelCompetence = $this->findCompetence($competence_id);
+
+
+        if ($modelCompetence->delete()) {
+            return $this->redirect(['competence','id' => $model->id]);
+        }
+    }
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return YearAttestation the loaded model
+     * @return Checkout the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Checkout::find($id)->with('year','attestation','subject','group')->one()) !== null) {
+        if (($model = Checkout::find($id)->with('year','attestation','subject','group')->where(['id'=>$id])->one()) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена!');
+        }
+    }
+
+    /**
+     * Finds the CheckoutCompetence model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return CheckoutCompetence the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findCompetence($id)
+    {
+        if (($model = CheckoutCompetence::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая компетенция не найдена!');
+        }
+    }
+
+    /**
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return Checkout the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findWork($id)
+    {
+        if (($model = Checkout::find($id)->with('year','attestation','subject','group')->where(['id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

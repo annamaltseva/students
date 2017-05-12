@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "checkout_competence".
@@ -31,6 +32,17 @@ class CheckoutCompetence extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -50,12 +62,18 @@ class CheckoutCompetence extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'checkout_id' => 'Checkout ID',
-            'name' => 'Name',
+            'name' => 'Название',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function beforeValidate() {
+        $this->user_id = Yii::$app->user->identity->id;
+        return parent::beforeValidate();
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
