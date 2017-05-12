@@ -56,20 +56,55 @@ $this->title = "Формы контроля";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {rating} {delete} ',
+            'template' => '{update} {competence} {work} {rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:100px;'],
             'buttons' => [
                 'rating' => function ($url, $model) {
-                    $action = ($model->rating_id==1)? 'rating': 'work';
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-list-alt"></span>',
-                        Url::to([
-                            $action,
-                            'id' => $model->id
-                        ]),                            [
-                        'title' => 'Баллы',
-                    ]);
+                    $action = ($model->rating_id==1)? 'rating': 'rating-quality';
+                    if ($model->rating_id==1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-star"></span>',
+                            Url::to([
+                                'rating',
+                                'id' => $model->id
+                            ]),                            [
+                            'title' => 'Баллы',
+                        ]);
+                    } else {
+                        return '';
+                    }
+
+                },
+                'work' => function ($url, $model) {
+                    if ($model->rating_id==1) {
+                        return '';
+                    } else {
+
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-align-justify"></span>',
+                            Url::to([
+                                'work',
+                                'id' => $model->id
+                            ]), [
+                            'title' => 'Работы',
+                        ]);
+                    }
+                },
+                'competence' => function ($url, $model) {
+                    if ($model->rating_id==1) {
+                        return '';
+                    } else {
+
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-th-list"></span>',
+                            Url::to([
+                                'competence',
+                                'id' => $model->id
+                            ]), [
+                            'title' => 'Компетенции',
+                        ]);
+                    }
                 },
             ]
 
