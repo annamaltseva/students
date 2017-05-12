@@ -74,16 +74,65 @@ class CheckoutController extends PrepodController
 
     public function actionWork($id)
     {
-        $model = $this->findWork($id);
-        $studentResults = Student::find()->where(['group_id'=>$model->group_id])->all();
+        $model = $this->findModel($id);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => CheckoutWork::find()->with('user')->where(['checkout_id' =>$id])
+        ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('work', [
                 'model' => $model,
-                'studentResults' =>$studentResults
+                'dataProvider' =>$dataProvider
             ]);
+        }
+    }
+    public function actionCreateWork($id)
+    {
+
+        $model = $this->findModel($id);
+        $modelWork = new CheckoutWork();
+        $modelWork->checkout_id = $model->id;
+
+        if ($modelWork->load(Yii::$app->request->post()) && $modelWork->save()) {
+            return $this->redirect(['work','id' => $model->id]);
+        } else {
+            return $this->render('_work_form', [
+                'modelWork' => $modelWork,
+                'model' => $model
+            ]);
+        }
+    }
+
+
+    public function actionUpdateWork($id, $work_id)
+    {
+
+        $model = $this->findModel($id);
+        $modelWork = $this->findWork($work_id);
+
+
+        if ($modelWork->load(Yii::$app->request->post()) && $modelWork->save()) {
+            return $this->redirect(['work','id' => $model->id]);
+        } else {
+            return $this->render('_work_form', [
+                'model' => $model,
+                'modelWork' => $modelWork
+            ]);
+        }
+    }
+
+    public function actionDeleteWork($id, $work_id)
+    {
+
+        $model = $this->findModel($id);
+        $modelWork = $this->findWork($work_id);
+
+
+        if ($modelWork->delete()) {
+            return $this->redirect(['work','id' => $model->id]);
         }
     }
 
@@ -180,18 +229,18 @@ class CheckoutController extends PrepodController
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the CheckoutWork model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Checkout the loaded model
+     * @return CheckoutWork the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findWork($id)
     {
-        if (($model = Checkout::find($id)->with('year','attestation','subject','group')->where(['id'=>$id])->one()) !== null) {
+        if (($model = CheckoutWork::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Запрашиваемая страница не найдена!');
+            throw new NotFoundHttpException('Запрашиваемая работа не найдена!');
         }
     }
 

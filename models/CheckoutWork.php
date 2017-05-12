@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "checkout_work".
@@ -27,6 +28,17 @@ class CheckoutWork extends \yii\db\ActiveRecord
         return 'checkout_work';
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -49,11 +61,16 @@ class CheckoutWork extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'checkout_id' => 'Checkout ID',
-            'name' => 'Name',
+            'name' => 'Наименование',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function beforeValidate() {
+        $this->user_id = Yii::$app->user->identity->id;
+        return parent::beforeValidate();
     }
 
     /**
