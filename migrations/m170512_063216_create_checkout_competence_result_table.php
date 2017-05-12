@@ -21,6 +21,7 @@ class m170512_063216_create_checkout_competence_result_table extends Migration
         $this->createTable('checkout_competence_result', [
             'id' => $this->primaryKey(),
             'checkout_competence_id' => $this->integer()->notNull(),
+            'checkout_work_id' => $this->integer()->notNull(),
             'student_id' => $this->integer()->notNull(),
             'competence_level_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
@@ -41,6 +42,24 @@ class m170512_063216_create_checkout_competence_result_table extends Migration
             'checkout_competence_result',
             'checkout_competence_id',
             'checkout_competence',
+            'id',
+            'CASCADE'
+        );
+
+
+        // creates index for column `checkout_work_id`
+        $this->createIndex(
+            'idx-checkout_work_result-checkout_competence_id',
+            'checkout_competence_result',
+            'checkout_work_id'
+        );
+
+        // add foreign key for table `checkout_work`
+        $this->addForeignKey(
+            'fk-checkout_competence_result-checkout_work_id',
+            'checkout_competence_result',
+            'checkout_work_id',
+            'checkout_work',
             'id',
             'CASCADE'
         );
@@ -111,6 +130,18 @@ class m170512_063216_create_checkout_competence_result_table extends Migration
         // drops index for column `checkout_competence_id`
         $this->dropIndex(
             'idx-checkout_competence_result-checkout_competence_id',
+            'checkout_competence_result'
+        );
+
+        // drops foreign key for table `checkout_work`
+        $this->dropForeignKey(
+            'fk-checkout_competence_result-checkout_work_id',
+            'checkout_competence_result'
+        );
+
+        // drops index for column `checkout_work_id`
+        $this->dropIndex(
+            'idx-checkout_competence_result-checkout_work_id',
             'checkout_competence_result'
         );
 
