@@ -261,4 +261,82 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return self::find()->where(['is_admin' => 0 ]);
     }
+
+    public static function roleCurrentUser() {
+        if (Yii::$app->user->isGuest)
+        {
+            return '';
+        } else {
+            if (Yii::$app->user->identity->is_admin ==1) return 'admin';
+            if (Yii::$app->user->identity->is_admin ==0) return 'user';
+        }
+
+    }
+
+    public static function getMenuItemsByRoleUserAndLayout($role)
+    {
+
+        switch ($role) {
+            case 'admin':
+                return [
+                    [
+                        'label' => 'Справочники',
+                        'items' => [
+                            ['label' => 'Учебные года', 'url' => ['/year/index']],
+                            ['label' => 'Типы формы контроля', 'url' => ['/checkout-form/index']],
+                            ['label' => 'Предметы', 'url' => ['/subject/index']],
+                            ['label' => 'Аттестации', 'url' => ['/attestation/index']],
+                            ['label' => 'Методы оценки', 'url' => ['/rating/index']],
+                            ['label' => 'Уровни компетенции', 'url' => ['/competence-level/index']],
+                        ],
+                    ],
+                    [
+                        'label' => 'Студенты',
+                        'items' => [
+                            ['label' => 'Группы', 'url' => ['/group/index']],
+                            ['label' => 'Студенты', 'url' => ['/student/index']],
+                        ],
+                    ],
+                    [
+                        'label' => 'Оценивание',
+                        'items' => [
+                            ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
+                            ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
+                        ],
+                    ],
+                    ['label' => 'Преподаватели', 'url' => ['/teacher/index']],
+                    [
+                        'label' => 'Выйти (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                        'active' => false
+                    ],
+
+                ];
+                break;
+
+            case 'user':
+                return [
+                    [
+                        'label' => 'Студенты',
+                        'items' => [
+                            ['label' => 'Группы', 'url' => ['/group/index']],
+                            ['label' => 'Студенты', 'url' => ['/student/index']],
+                        ],
+                    ],
+                    [
+                        'label' => 'Оценивание',
+                        'items' => [
+                            ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
+                            ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
+                        ],
+                    ],
+                ];
+                break;
+            default:
+                return [
+                    ['label' => 'Войти', 'url' => ['/site/login']]
+                ];
+        }
+    }
 }

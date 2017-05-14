@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\User;
 
 AppAsset::register($this);
 ?>
@@ -40,33 +41,11 @@ AppAsset::register($this);
     <?php
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
+        /*
         'items' => [
-            [
-                'label' => 'Справочники',
-                'items' => [
-                    ['label' => 'Учебные года', 'url' => ['/year/index']],
-                    ['label' => 'Типы формы контроля', 'url' => ['/checkout-form/index']],
-                    ['label' => 'Предметы', 'url' => ['/subject/index']],
-                    ['label' => 'Аттестации', 'url' => ['/attestation/index']],
-                    ['label' => 'Методы оценки', 'url' => ['/rating/index']],
-                    ['label' => 'Уровни компетенции', 'url' => ['/competence-level/index']],
-                ],
-            ],
-            [
-                'label' => 'Студенты',
-                'items' => [
-                    ['label' => 'Группы', 'url' => ['/group/index']],
-                    ['label' => 'Студенты', 'url' => ['/student/index']],
-                ],
-            ],
-            [
-                'label' => 'Оценивание',
-                'items' => [
-                    ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
-                    ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
-                ],
-            ],
-            ['label' => 'Преподаватели', 'url' => ['/teacher/index']],
+
+            User::getMenuItemsByRoleUserAndLayout(User::roleCurrentUser()),
+
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
@@ -80,6 +59,8 @@ AppAsset::register($this);
                 . '</li>'
             )
         ],
+        */
+        'items' =>User::getMenuItemsByRoleUserAndLayout(User::roleCurrentUser())
     ]);
     NavBar::end();
     ?>
