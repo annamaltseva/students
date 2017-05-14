@@ -98,4 +98,13 @@ class CheckoutCompetence extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CheckoutCompetenceResult::className(), ['checkout_competence_id' => 'id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public static function getAll($checkoutID)
+    {
+        $query = self::find()->where(['checkout_id' =>$checkoutID]);
+        return $query->all();
+    }
 }

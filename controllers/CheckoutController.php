@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Checkout;
+use app\models\CheckoutWorkCompetence;
 use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
@@ -89,6 +90,7 @@ class CheckoutController extends PrepodController
             ]);
         }
     }
+
     public function actionCreateWork($id)
     {
 
@@ -136,6 +138,46 @@ class CheckoutController extends PrepodController
         }
     }
 
+    public function actionWorkCompetence($id, $work_id)
+    {
+
+        $model = $this->findWork($work_id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => CheckoutWorkCompetence::find()->with('user','checkoutCompetence')->where(['checkout_work_id' =>$work_id])
+        ]);
+
+        return $this->render('work-competence',[
+            'dataProvider'=> $dataProvider,
+            'model' => $model
+        ]);
+    }
+
+    public function actionCreateWorkCompetence($id, $work_id)
+    {
+
+        $model = $this->findWork($work_id);
+        $modelWork = new CheckoutWorkCompetence();
+        $modelWork->checkout_work_id = $model->id;
+
+        if ($modelWork->load(Yii::$app->request->post()) && $modelWork->save()) {
+            return $this->redirect(['work-competence','id' => $id,'work_id' =>$model->$work_id ]);
+        } else {
+            return $this->render('_work_competence_form', [
+                'modelWork' => $modelWork,
+                'model' => $model
+            ]);
+        }
+    }
+    public function actionDeleteWorkCompetence($id, $checkout_id, $work_id)
+    {
+        $model = $this->findWorkCompetence($id);
+
+        if ($model->delete()) {
+            return $this->redirect(['work-competence','id' => $checkout_id, 'work_id' =>$work_id]);
+        }
+    }
+
+
     public function actionCompetence($id)
     {
         $model = $this->findModel($id);
@@ -166,13 +208,10 @@ class CheckoutController extends PrepodController
         }
     }
 
-
     public function actionUpdateCompetence($id, $competence_id)
     {
-
         $model = $this->findModel($id);
         $modelCompetence = $this->findCompetence($competence_id);
-
 
         if ($modelCompetence->load(Yii::$app->request->post()) && $modelCompetence->save()) {
             return $this->redirect(['competence','id' => $model->id]);
@@ -186,10 +225,8 @@ class CheckoutController extends PrepodController
 
     public function actionDeleteCompetence($id, $competence_id)
     {
-
         $model = $this->findModel($id);
         $modelCompetence = $this->findCompetence($competence_id);
-
 
         if ($modelCompetence->delete()) {
             return $this->redirect(['competence','id' => $model->id]);
@@ -244,4 +281,19 @@ class CheckoutController extends PrepodController
         }
     }
 
+    /**
+     * Finds the CheckoutWorkCompetence model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return CheckoutWorkCompetence the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findWorkCompetence($id)
+    {
+        if (($model = CheckoutWorkCompetence::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая компетенция по работе не найдена!');
+        }
+    }
 }
