@@ -74,7 +74,6 @@ $this->title = "Формы контроля";
                     } else {
                         return '';
                     }
-
                 },
                 'work' => function ($url, $model) {
                     if ($model->rating_id==1) {

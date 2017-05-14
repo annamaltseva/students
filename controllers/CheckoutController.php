@@ -73,6 +73,24 @@ class CheckoutController extends PrepodController
         }
     }
 
+    public function actionRatingQuality($id,$work_id)
+    {
+        $model = $this->findModel($id);
+        $studentResults = Student::find()->where(['group_id'=>$model->group_id])->all();
+        $competence = CheckoutWorkCompetence::find()->with('checkoutCompetence')->where(['checkout_work_id'=> $work_id])->all();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('rating-quality', [
+                'model' => $model,
+                'studentResults' =>$studentResults,
+                'competence' =>$competence
+            ]);
+        }
+    }
+
+
     public function actionWork($id)
     {
         $model = $this->findModel($id);
@@ -160,7 +178,7 @@ class CheckoutController extends PrepodController
         $modelWork->checkout_work_id = $model->id;
 
         if ($modelWork->load(Yii::$app->request->post()) && $modelWork->save()) {
-            return $this->redirect(['work-competence','id' => $id,'work_id' =>$model->$work_id ]);
+            return $this->redirect(['work-competence','id' => $id,'work_id' =>$work_id ]);
         } else {
             return $this->render('_work_competence_form', [
                 'modelWork' => $modelWork,

@@ -50,4 +50,10 @@ class CompetenceLevel extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
+    public static function getAll()
+    {
+        $query = self::find();
+        return $query->all();
+    }
 }
