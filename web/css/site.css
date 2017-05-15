@@ -194,3 +194,9 @@ h1{
     color: #21a649 !important;
     border-bottom: 4px solid #21a649 !important;
 }
+.table > tbody {
+    font-size: 12px;
+}
+.table > thead {
+    font-size: 13px;
+}

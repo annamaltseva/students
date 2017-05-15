@@ -302,6 +302,7 @@ class User extends ActiveRecord implements IdentityInterface
                         'items' => [
                             ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
                             ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
+                            ['label' => 'Посещаемость', 'url' => ['/visit/index']],
                         ],
                     ],
                     ['label' => 'Преподаватели', 'url' => ['/teacher/index']],
@@ -329,7 +330,14 @@ class User extends ActiveRecord implements IdentityInterface
                         'items' => [
                             ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
                             ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
+                            ['label' => 'Посещаемость', 'url' => ['/visit/index']],
                         ],
+                    ],
+                    [
+                        'label' => 'Выйти (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                        'active' => false
                     ],
                 ];
                 break;
