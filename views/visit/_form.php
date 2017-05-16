@@ -36,7 +36,7 @@ if ($model->isNewRecord) {
                 'language' => 'ru',
                 'options'=>[
                     'class'=>'form-control',
-                    'placeholder' => 'Начало встречи ...'
+                    'placeholder' => ' Укажите дату лекции...'
                 ],
                 'pluginOptions' => [
                     'format' => 'dd.mm.yyyy',

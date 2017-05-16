@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Visit;
 
 use app\models\Student;
+use app\models\VisitResult;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use Yii;
@@ -60,7 +61,38 @@ class VisitController extends PrepodController
     public function actionResult($id)
     {
         $model = $this->findModel($id);
-        $studentResults = Student::find()->where(['group_id'=>$model->group_id])->all();
+        $studentResults = Student::find()
+                    ->joinWith([
+                        'visitResults' => function ($query) use ($id) {
+                            $query->onCondition(['visit_result.visit_id' => $id]);
+                        },
+                    ], true, 'LEFT JOIN')
+                    ->where(['group_id' => $model->group_id])
+                    ->orderBy(['name'=>'desc'])
+                    ->all();
+
+        if (count(Yii::$app->request->post())>0)
+        {
+            $post = Yii::$app->request->post();
+            foreach ($studentResults as $result) {
+                if ($post["st_".$result->id] =="on") {
+                    $visitResult = new VisitResult();
+                    $visitResult->visit_id = $model->id;
+                    $visitResult->student_id = $result->id;
+                    $visitResult->rating = $model->rating;
+                    $visitResult->user_id = Yii::$app->user->identity->id;
+                    if ($visitResult->validate()) {
+                        $visitResult->save();
+                    }
+                } else {
+                    $visitResult = VisitResult::find()->where(['student_id' =>$result->id, 'visit_id' => $model->id ])->one();
+                    if ($visitResult) {
+                        $visitResult->delete();
+                    }
+                }
+            }
+            return $this->redirect(['result','id' =>$id ]);
+        }
 
         return $this->render('result', [
             'model' =>$model,

@@ -84,9 +84,23 @@ class Student extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVisitResults()
+    {
+        return $this->hasMany(VisitResult::className(), ['student_id' => 'id']);
+    }
+
     public function beforeValidate() {
         $this->user_id = Yii::$app->user->identity->id;
         return parent::beforeValidate();
+    }
+
+    public static function getByGroup($groupID)
+    {
+        $query = self::find()->where(['group_id'=>$groupID])->orderBy(['name'=>'desc']);
+        return $query->all();
     }
 
 }
