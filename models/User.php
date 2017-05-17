@@ -282,7 +282,7 @@ class User extends ActiveRecord implements IdentityInterface
                     [
                         'label' => 'Справочники',
                         'items' => [
-                            ['label' => 'Учебные года', 'url' => ['/year/index']],
+                            ['label' => 'Учебные годы', 'url' => ['/year/index']],
                             ['label' => 'Типы формы контроля', 'url' => ['/checkout-form/index']],
                             ['label' => 'Предметы', 'url' => ['/subject/index']],
                             ['label' => 'Аттестации', 'url' => ['/attestation/index']],
@@ -301,7 +301,7 @@ class User extends ActiveRecord implements IdentityInterface
                         'label' => 'Оценивание',
                         'items' => [
                             ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
-                            ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
+                            ['label' => 'Контроль успешности обучения', 'url' => ['/control/index']],
                             ['label' => 'Посещаемость', 'url' => ['/visit/index']],
                         ],
                     ],
@@ -329,7 +329,7 @@ class User extends ActiveRecord implements IdentityInterface
                         'label' => 'Оценивание',
                         'items' => [
                             ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
-                            ['label' => 'Формы контроля', 'url' => ['/checkout/index']],
+                            ['label' => 'контроль успешности обучения', 'url' => ['/checkout/index']],
                             ['label' => 'Посещаемость', 'url' => ['/visit/index']],
                         ],
                     ],

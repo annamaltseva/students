@@ -76,7 +76,7 @@ echo $this->render('_header',[
                            'id' => $model->checkout_id,
                            'work_id'=>$model->id
                        ]), [
-                       'title' => 'Баллы',
+                       'title' => 'Уровни',
                     ]);
                 },
                 'delete' => function ($url, $model) {

@@ -200,3 +200,12 @@ h1{
 .table > thead {
     font-size: 13px;
 }
+.field-result {
+    max-width: 40px;
+}
+.field-result:focus {
+    background: greenyellow;
+}
+.table > tbody > tr > td, .table > tfoot > tr > td {
+    vertical-align: middle;
+}

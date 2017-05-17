@@ -24,33 +24,6 @@ if ($model->isNewRecord) {
     <div class="col-md-6 col-sm-12 col-xs-12">
 
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'year_attestation_id')
-            ->dropDownList(ArrayHelper::map(YearAttestation::getAll(), 'id',
-                function($modellist, $defaultValue) {
-                    return $modellist["year"]["name"].'-'.$modellist["attestation"]["name"];
-                }            ), [
-                'class'=>'form-control',
-                'prompt' => 'Выберите аттестацию...'
-            ]);
-        ?>
-        <?= $form->field($model, 'group_id')
-            ->dropDownList(ArrayHelper::map(Group::getAll(), 'id', 'name'), [
-                'class'=>'form-control',
-                'prompt' => 'Выберите группу...'
-            ]);
-        ?>
-        <?= $form->field($model, 'subject_id')
-            ->dropDownList(ArrayHelper::map(Subject::getAll(), 'id', 'name'), [
-                'class'=>'form-control',
-                'prompt' => 'Выберите предмет ...'
-            ]);
-        ?>
-        <?= $form->field($model, 'rating_id')
-            ->dropDownList(ArrayHelper::map(Rating::getAll(), 'id', 'name'), [
-                'class'=>'form-control',
-                'prompt' => 'Выберите метод оценки ...'
-            ]);
-        ?>
         <?= $form->field($model, 'checkout_form_id')
             ->dropDownList(ArrayHelper::map(CheckoutForm::getAll(), 'id', 'name'), [
                 'class'=>'form-control',

@@ -23,7 +23,12 @@ echo $this->render('_header',[
     <tr>
         <td><b>№</b></td>
         <td><b>Студент</b></td>
-        <td><b>Балл</b></td>
+        <?php
+            for ($i=1;$i<=$model->quantity;$i++)
+            {
+                echo '<td class="text-center"><b>'.$i.'</b></td>';
+            }
+        ?>
     </tr>
     <?php
     $i=1;
@@ -33,7 +38,13 @@ echo $this->render('_header',[
     <tr>
          <td><?=$i?></td>
          <td><?=$result->name?></td>
-         <td><input type="text" size="5"></td>
+        <?php
+        for ($i=1;$i<=$model->quantity;$i++)
+        {
+            echo'<td class="text-center"><input type="text" size="1"></td>';
+        }
+        ?>
+
     </tr>
     <?php
         $i++;

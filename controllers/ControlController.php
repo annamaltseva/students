@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\models\Checkout;
+use app\models\CheckoutResult;
 use app\models\CheckoutWorkCompetence;
+use app\models\Control;
 use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
@@ -11,26 +13,24 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use Yii;
 
-class CheckoutController extends PrepodController
+class ControlController extends PrepodController
 {
-    public function actionIndex($control_id)
+    public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Checkout::find()->with('user','control')->where(['control_id' => $control_id])
+            'query' => Control::find()->with('year','user','subject','group','rating')
         ]);
         return $this->render('index',[
-            'dataProvider'=> $dataProvider,
-            'control_id' =>$control_id
+            'dataProvider'=> $dataProvider
         ]);
     }
 
-    public function actionCreate($control_id)
+    public function actionCreate()
     {
-        $model = new Checkout();
-        $model->control_id = $control_id;
+        $model = new Control();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'control_id' => $control_id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -43,7 +43,7 @@ class CheckoutController extends PrepodController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'control_id' => $model->control_id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -63,15 +63,21 @@ class CheckoutController extends PrepodController
     public function actionRating($id)
     {
         $model = $this->findModel($id);
-        $studentResults = Student::find()
-            ->where(['group_id'=>$model->group_id])->all();
-        //
+        $students = Student::find()
+            ->where(['group_id'=>$model->group_id])
+            ->orderBy(['name'=>'desc'])->all();
+        $results = CheckoutResult::getAll($id);
+        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' =>$model->id])->all();
+
+        //->orderBy(['name'=>'desc'])
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('rating', [
                 'model' => $model,
-                'studentResults' =>$studentResults
+                'students' =>$students,
+                'checkouts' =>$checkouts,
+                'results' =>$results
             ]);
         }
     }
@@ -79,7 +85,7 @@ class CheckoutController extends PrepodController
     public function actionRatingQuality($id,$work_id)
     {
         $model = $this->findModel($id);
-        $studentResults = Student::find()->where(['group_id'=>$model->control->group_id])->all();
+        $studentResults = Student::find()->where(['group_id'=>$model->group_id])->all();
         $competence = CheckoutWorkCompetence::find()->with('checkoutCompetence')->where(['checkout_work_id'=> $work_id])->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -263,7 +269,7 @@ class CheckoutController extends PrepodController
      */
     protected function findModel($id)
     {
-        if (($model = Checkout::find($id)->with('control')->where(['id'=>$id])->one()) !== null) {
+        if (($model = Control::find($id)->with('year','attestation','subject','group')->where(['id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

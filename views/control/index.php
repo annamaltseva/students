@@ -5,14 +5,9 @@ use app\models\User;
 use yii\helpers\Url;
 $this->title = "Формы контроля";
 ?>
-<div class="row text-right">
-    <div class="col-md-12">
-        <?= Html::a('К контролю ', ['/control/index'], ['class' => '']) ?>
-    </div>
-</div>
 <div class="row">
     <div class="col-md-12">
-        <?= Html::a('Добавить', ['create','control_id' => $control_id], ['class' => 'printBtn']) ?>
+        <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
     </div>
 </div>
 <?= GridView::widget([
@@ -23,13 +18,28 @@ $this->title = "Формы контроля";
             'contentOptions' => ['style' => 'width:40px;']
         ],
         [
-            'attribute' => 'checkoutForm.name',
-            'label' =>'Тип'
+            'attribute' => 'year.name',
+            'label' =>'Год'
         ],
         [
-            'attribute' => 'quantity',
-            'contentOptions' => ['class' => 'text-center'],
-            'label' =>'Кол'
+            'attribute' => 'attestation.name',
+            'label' =>'Аттестация'
+        ],
+        [
+            'attribute' => 'group.name',
+            'label' =>'Группа'
+        ],
+        [
+            'attribute' => 'subject.name',
+            'label' =>'Предмет'
+        ],
+        [
+            'attribute' => 'rating.name',
+            'label' =>'Метод оценки'
+        ],
+        [
+            'attribute' => 'limit_rating',
+            'label' =>'Мин. балл'
         ],
         [
             'attribute' => 'user.name',
@@ -50,13 +60,13 @@ $this->title = "Формы контроля";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {competence} {work} {delete} ',
+            'template' => '{update} {work} {rating} {delete} ',
             'header' => 'Действия',
-            'contentOptions' => ['style' => 'width:100px;'],
+            'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
                 'rating' => function ($url, $model) {
-                    if ($model->control->rating_id==1) {
-
+                    $action = ($model->rating_id==1)? 'rating': 'rating-quality';
+                    if ($model->rating_id==1) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-star"></span>',
                             Url::to([
@@ -65,32 +75,25 @@ $this->title = "Формы контроля";
                             ]),                            [
                             'title' => 'Баллы',
                         ]);
-
                     } else {
                         return '';
                     }
-
                 },
                 'work' => function ($url, $model) {
-
-                    if ($model->control->rating_id==1) {
-                        return '';
-                    } else {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-align-justify"></span>',
-                            Url::to([
-                                'work',
-                                'id' => $model->id
-                            ]), [
-                            'title' => 'Работы',
-                        ]);
-                    }
+                     return Html::a(
+                        '<span class="glyphicon glyphicon-align-justify"></span>',
+                        Url::to([
+                            '/checkout/index',
+                            'control_id' => $model->id
+                        ]), [
+                        'title' => 'Формы контроля',
+                     ]);
                 },
                 'competence' => function ($url, $model) {
-
-                    if ($model->control->rating_id==1) {
+                    if ($model->rating_id==1) {
                         return '';
                     } else {
+
                         return Html::a(
                             '<span class="glyphicon glyphicon-th-list"></span>',
                             Url::to([

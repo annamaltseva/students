@@ -1,6 +1,6 @@
 <?php
 use yii\grid\GridView;
-$this->title = "Учебные года";
+$this->title = "Учебные годы";
 ?>
 <div class="col-md-12">
     <a href="" class="printBtn">Добавить</a>

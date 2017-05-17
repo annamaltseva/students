@@ -45,7 +45,7 @@ echo $this->render('_header',[
                 <?= Html::dropDownList('id', null,
                     ArrayHelper::map(CompetenceLevel::getAll(), 'id', 'name'),[
                         'class' => 'form-control',
-                        'prompt' => 'Выберите компетенцию ...'
+                        'prompt' => 'Выберите уровень ...'
 
                     ]) ?>
             </td>
