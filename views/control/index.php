@@ -60,7 +60,7 @@ $this->title = "Формы контроля";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {work} {rating} {delete} ',
+            'template' => '{update} {work} {visit} {rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -74,6 +74,21 @@ $this->title = "Формы контроля";
                                 'id' => $model->id
                             ]),                            [
                             'title' => 'Баллы',
+                        ]);
+                    } else {
+                        return '';
+                    }
+                },
+                'visit' => function ($url, $model) {
+                    $action = ($model->rating_id==1)? 'rating': 'rating-quality';
+                    if ($model->rating_id==1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-calendar"></span>',
+                            Url::to([
+                                '/visit/index',
+                                'control_id' => $model->id
+                            ]),                            [
+                            'title' => 'Посещаемость',
                         ]);
                     } else {
                         return '';

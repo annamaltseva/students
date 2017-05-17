@@ -10,9 +10,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property string $date
- * @property integer $year_attestation_id
- * @property integer $group_id
- * @property integer $subject_id
+ * @property integer $control_id
  * @property string $rating
  * @property string $description
  * @property integer $user_id
@@ -51,15 +49,13 @@ class Visit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'year_attestation_id', 'group_id', 'subject_id', 'rating', 'user_id'], 'required'],
+            [['date', 'control_id', 'rating', 'user_id'], 'required'],
             [['date'], 'safe'],
-            [['year_attestation_id', 'group_id', 'subject_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
+            [['control_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
             [['rating'], 'number'],
             [['description'], 'string', 'max' => 255],
-            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
-            [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject_id' => 'id']],
+            [['control_id'], 'exist', 'skipOnError' => true, 'targetClass' => Control::className(), 'targetAttribute' => ['control_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['year_attestation_id'], 'exist', 'skipOnError' => true, 'targetClass' => YearAttestation::className(), 'targetAttribute' => ['year_attestation_id' => 'id']],
         ];
     }
 
