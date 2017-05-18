@@ -9,6 +9,8 @@ use app\models\Control;
 use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
+use app\models\Visit;
+use app\models\VisitResult;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use Yii;
@@ -68,8 +70,8 @@ class ControlController extends PrepodController
             ->orderBy(['name'=>'desc'])->all();
         $results = CheckoutResult::getAll($id);
         $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' =>$model->id])->all();
+        $visits = VisitResult::getSumAll($id);
 
-        //->orderBy(['name'=>'desc'])
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
@@ -77,10 +79,34 @@ class ControlController extends PrepodController
                 'model' => $model,
                 'students' =>$students,
                 'checkouts' =>$checkouts,
+                'results' =>$results,
+                'visits' => $visits
+            ]);
+        }
+    }
+
+    public function actionRatingVisit($id)
+    {
+        $model = $this->findModel($id);
+        $students = Student::find()
+            ->where(['group_id'=>$model->group_id])
+            ->orderBy(['name'=>'desc'])->all();
+        $results = VisitResult::getAll($id);
+        $visits = Visit::find()->where(['control_id' =>$model->id])->all();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('rating-visit', [
+                'model' => $model,
+                'students' =>$students,
+                'visits' =>$visits,
                 'results' =>$results
             ]);
         }
     }
+
+
 
     public function actionRatingQuality($id,$work_id)
     {

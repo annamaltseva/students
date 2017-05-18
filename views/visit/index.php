@@ -2,11 +2,11 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
-$this->title = "Посещение лекций";
+$this->title = "Лекции";
 ?>
 <div class="row">
     <div class="col-md-12">
-        <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
+        <?= Html::a('Добавить', ['create', 'control_id' => $control_id], ['class' => 'printBtn']) ?>
     </div>
 </div>
 <?= GridView::widget([
@@ -17,26 +17,14 @@ $this->title = "Посещение лекций";
             'contentOptions' => ['style' => 'width:50px;']
         ],
         [
-            'attribute' => 'year.name',
-            'label' =>'Год'
-        ],
-        [
-            'attribute' => 'attestation.name',
-            'label' =>'Аттестация'
-        ],
-        [
-            'attribute' => 'group.name',
-            'label' =>'Группа'
-        ],
-        [
-            'attribute' => 'subject.name',
-            'label' =>'Предмет'
+            'attribute' => 'date',
+            'format'    => [ 'date', 'php:d.m.Y' ],
+            'label' =>'Дата'
         ],
         [
             'attribute' => 'rating',
             'label' =>'Балл'
         ],
-
         'description',
         [
             'attribute' => 'user.name',
@@ -57,20 +45,34 @@ $this->title = "Посещение лекций";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {competence} {work} {rating} {delete} ',
+            'template' => '{update}  {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:100px;'],
             'buttons' => [
-                'rating' => function ($url, $model) {
+                'update' => function ($url, $model) {
                     return Html::a(
-                        '<span class="glyphicon glyphicon-star"></span>',
+                        '<span class="glyphicon glyphicon-pencil"></span>',
                         Url::to([
-                            'result',
-                            'id' => $model->id
-                        ]),                            [
-                        'title' => 'Журнал посещаемости',
+                            'update',
+                            'control_id' => $model->control_id,
+                            'id' => $model->id,
+                        ]),[
+                        'title' => 'Update'
                     ]);
                 },
+                'delete' => function ($url, $model) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-trash"></span>',
+                        Url::to([
+                            'delete',
+                            'id' => $model->id,
+                            'control_id'=>$model->control_id
+                        ]), [
+                        'title' => 'Удалить',
+                        'data-confirm'=>'Are you sure you want to delete this item?'
+                    ]);
+                },
+
             ]
 
         ]

@@ -12,22 +12,24 @@ use Yii;
 
 class VisitController extends PrepodController
 {
-    public function actionIndex()
+    public function actionIndex($control_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Visit::find()->with('year', 'attestation', 'user', 'subject', 'group')
+            'query' => Visit::find()->with('user')->where(['control_id' => $control_id])
         ]);
         return $this->render('index', [
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'control_id' => $control_id
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($control_id)
     {
         $model = new Visit();
+        $model->control_id = $control_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','control_id' =>$control_id]);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -35,12 +37,12 @@ class VisitController extends PrepodController
         }
     }
 
-    public function actionUpdate($id)
+    public function actionUpdate($control_id,$id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','control_id' =>$control_id]);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -48,12 +50,12 @@ class VisitController extends PrepodController
         }
     }
 
-    public function actionDelete($id)
+    public function actionDelete($control_id,$id)
     {
         $model = $this->findModel($id);
 
         if ($model->delete()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','control_id' =>$control_id]);
         }
     }
 
@@ -112,7 +114,7 @@ class VisitController extends PrepodController
      */
     protected function findModel($id)
     {
-        if (($model = Visit::find()->with('year', 'attestation', 'subject', 'group')->where(['id' =>$id])->one()) !== null) {
+        if (($model = Visit::find()->with('control')->where(['id' =>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

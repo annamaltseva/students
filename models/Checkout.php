@@ -71,6 +71,7 @@ class Checkout extends \yii\db\ActiveRecord
             'id' => 'ID',
             'quantity' => 'Количество',
             'rating_id' => 'Метод оценки',
+            'checkout_form_id' => 'Форма контроля',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

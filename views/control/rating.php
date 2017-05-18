@@ -11,15 +11,13 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\MaskedInput;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Person */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = "Количественная оценка";
-/*
-echo $this->render('_header',[
+echo $this->render('@app/views/layouts/part/_control_header',[
     'model' => $model
 ]);
-*/
+
 ?>
 
 <table class="table table-striped table-hover table-bordered">
@@ -33,6 +31,7 @@ echo $this->render('_header',[
         <?php
         }
         ?>
+        <td rowspan="2" class="text-center"><b>Посещ.</b></td>
         <td rowspan="2" class="text-center"><b>Мин. балл</b></td>
         <td rowspan="2" class="text-center"><b>Итого</b></td>
     </tr>
@@ -56,7 +55,12 @@ echo $this->render('_header',[
             <td><?=$i?></td>
             <td><?=$student->name?></td>
             <?php
-            $sumRow=0;
+            $sumRow = 0;
+            $sumVisit = 0;
+            if (isset($visits[$student->id])) {
+                $sumVisit = $visits[$student->id];
+            }
+
             foreach ($checkouts as $checkout) {
 
                 for ($i=1;$i<=$checkout->quantity;$i++)
@@ -84,6 +88,9 @@ echo $this->render('_header',[
                                             sum_row = sum_row +eval(row[i].value)
                                         }
                                      }
+
+                                     sum_row = sum_row +eval($("#res_'.$student->id.'").data("rating"));
+
                                      $("#rs_'.$student->id.'").val(sum_row);
                                    })
                                    .fail(function() {
@@ -100,8 +107,9 @@ echo $this->render('_header',[
                 }
             }
             ?>
+            <td class="text-center"><b><span id="res_<?=$student->id?>" data-rating="<?=$sumVisit?>"><?=$sumVisit?></span></b></td>
             <td class="text-center"><b><?=$model->limit_rating?></b></td>
-            <td class="text-center"><input type="text" size="1" id = "rs_<?=$student->id?>" value="<?=$sumRow?>"></td>
+            <td class="text-center"><input type="text" size="1" id = "rs_<?=$student->id?>" value="<?=$sumRow+$sumVisit?>"></td>
         </tr>
         <?php
         $i++;

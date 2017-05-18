@@ -8,6 +8,7 @@ use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
 use yii\data\ActiveDataProvider;
+use app\models\Control;
 use yii\web\NotFoundHttpException;
 use Yii;
 
@@ -18,9 +19,11 @@ class CheckoutController extends PrepodController
         $dataProvider = new ActiveDataProvider([
             'query' => Checkout::find()->with('user','control')->where(['control_id' => $control_id])
         ]);
+        $model = Control::find()->where(['id'=> $control_id])->one();
         return $this->render('index',[
             'dataProvider'=> $dataProvider,
-            'control_id' =>$control_id
+            'control_id' => $control_id,
+            'model' => $model
         ]);
     }
 

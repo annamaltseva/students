@@ -83,21 +83,6 @@ class Visit extends \yii\db\ActiveRecord
         return parent::beforeValidate();
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGroup()
-    {
-        return $this->hasOne(Group::className(), ['id' => 'group_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSubject()
-    {
-        return $this->hasOne(Subject::className(), ['id' => 'subject_id']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -107,13 +92,6 @@ class Visit extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getYearAttestation()
-    {
-        return $this->hasOne(YearAttestation::className(), ['id' => 'year_attestation_id']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -126,18 +104,8 @@ class Visit extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getYear()
+    public function getControl()
     {
-        return $this->hasOne(Year::className(), ['id' => 'year_id'])
-            ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAttestation()
-    {
-        return $this->hasOne(Attestation::className(), ['id' => 'attestation_id'])
-            ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
+        return $this->hasOne(Control::className(), ['id' => 'control_id']);
     }
 }

@@ -1,15 +1,13 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
-use app\models\User;
 use yii\helpers\Url;
+
 $this->title = "Формы контроля";
+echo $this->render('@app/views/layouts/part/_control_header',[
+    'model' => $model
+]);
 ?>
-<div class="row text-right">
-    <div class="col-md-12">
-        <?= Html::a('К контролю ', ['/control/index'], ['class' => '']) ?>
-    </div>
-</div>
 <div class="row">
     <div class="col-md-12">
         <?= Html::a('Добавить', ['create','control_id' => $control_id], ['class' => 'printBtn']) ?>

@@ -1,15 +1,11 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
-use app\models\User;
 use yii\helpers\Url;
-$this->title = "Формы контроля";
+
+$this->title = "Контроль успешности обучения";
 ?>
-<div class="row">
-    <div class="col-md-12">
-        <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
-    </div>
-</div>
+
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
@@ -60,7 +56,7 @@ $this->title = "Формы контроля";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {work} {visit} {rating} {delete} ',
+            'template' => '{update} {work} {rating} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -80,13 +76,26 @@ $this->title = "Формы контроля";
                     }
                 },
                 'visit' => function ($url, $model) {
-                    $action = ($model->rating_id==1)? 'rating': 'rating-quality';
                     if ($model->rating_id==1) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-calendar"></span>',
                             Url::to([
                                 '/visit/index',
                                 'control_id' => $model->id
+                            ]),                            [
+                            'title' => 'Лекции',
+                        ]);
+                    } else {
+                        return '';
+                    }
+                },
+                'visit-rating' => function ($url, $model) {
+                    if ($model->rating_id==1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-star-empty"></span>',
+                            Url::to([
+                                'rating-visit',
+                                'id' => $model->id
                             ]),                            [
                             'title' => 'Посещаемость',
                         ]);
