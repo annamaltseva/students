@@ -34,6 +34,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         <td rowspan="2" class="text-center"><b>Посещ.</b></td>
         <td rowspan="2" class="text-center"><b>Мин. балл</b></td>
         <td rowspan="2" class="text-center"><b>Итого</b></td>
+        <td rowspan="2" class="text-center"><b>Оценка</b></td>
     </tr>
     <tr>
         <?php
@@ -109,7 +110,8 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             ?>
             <td class="text-center"><b><span id="res_<?=$student->id?>" data-rating="<?=$sumVisit?>"><?=$sumVisit?></span></b></td>
             <td class="text-center"><b><?=$model->limit_rating?></b></td>
-            <td class="text-center"><input type="text" size="1" id = "rs_<?=$student->id?>" value="<?=$sumRow+$sumVisit?>"></td>
+            <td class="text-center"><input type="text" size="1" id = "rs_<?=$student->id?>" value="<?=$sumRow+$sumVisit?>" style="text-align:right"></td>
+            <td class="text-center"><input type="text" size="1" id = "222_<?=$student->id?>" value="" style="text-align:right"></td>
         </tr>
         <?php
         $i++;

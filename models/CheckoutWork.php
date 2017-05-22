@@ -96,4 +96,13 @@ class CheckoutWork extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CheckoutCompetenceResult::className(), ['checkout_competence_id' => 'id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCheckoutWorkCompetence()
+    {
+        return $this->hasMany(CheckoutWorkCompetence::className(), ['checkout_work_id' => 'id']);
+    }
+
 }

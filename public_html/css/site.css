@@ -209,3 +209,15 @@ h1{
 .table > tbody > tr > td, .table > tfoot > tr > td {
     vertical-align: middle;
 }
+.row-competence {
+    font-size: 10px;
+}
+.row-work {
+    font-size: 11px;
+}
+.competence-level {
+    font-size: 11px;
+    height: auto !important;
+    padding: 3px 3px;
+    width:70px;
+}

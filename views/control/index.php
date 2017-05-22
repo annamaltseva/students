@@ -62,18 +62,14 @@ $this->title = "Контроль успешности обучения";
             'buttons' => [
                 'rating' => function ($url, $model) {
                     $action = ($model->rating_id==1)? 'rating': 'rating-quality';
-                    if ($model->rating_id==1) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-star"></span>',
                             Url::to([
-                                'rating',
+                                $action,
                                 'id' => $model->id
                             ]),                            [
-                            'title' => 'Баллы',
+                            'title' => 'Оценивание',
                         ]);
-                    } else {
-                        return '';
-                    }
                 },
                 'visit' => function ($url, $model) {
                     if ($model->rating_id==1) {

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "checkout_competence_result".
@@ -30,6 +31,16 @@ class CheckoutCompetenceResult extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'checkout_competence_result';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 
     /**
@@ -103,5 +114,35 @@ class CheckoutCompetenceResult extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+
+    public static function getAll($controlID)
+    {
+        $result=[];
+/*
+        $checkouts = Checkout::find()->where(['control_id'=>$controlID])->all();
+        foreach ($checkouts as $checkout) {
+            $checkoutResults = self::find()->where(['checkout_id' => $checkout->id])->all();
+            foreach ($checkoutResults as $checkoutResult) {
+                $result[$checkoutResult->student_id][$checkoutResult->checkout_id][$checkoutResult->work_num] =$checkoutResult->score;
+            }
+        }
+*/
+        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' => $controlID])->all();
+        foreach ($checkouts as $checkout) {
+            $works = CheckoutWork::find()->where(['checkout_id' => $checkout->id])->all();
+            foreach ($works as $work) {
+                $checkoutResults = CheckoutCompetenceResult::find()->with('competenceLevel')->where(['checkout_work_id' => $work->id])->all();
+                foreach ($checkoutResults as $checkoutResult) {
+                    $result[$checkoutResult->student_id][$checkoutResult->checkout_work_id][$checkoutResult->checkout_competence_id] = [
+                        'id' =>$checkoutResult->competence_level_id,
+                        'value' =>$checkoutResult->competenceLevel->level_value
+                    ];
+                }
+            }
+        }
+        return $result;
+
     }
 }

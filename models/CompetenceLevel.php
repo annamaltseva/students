@@ -56,4 +56,17 @@ class CompetenceLevel extends \yii\db\ActiveRecord
         $query = self::find();
         return $query->all();
     }
+
+    public static function getScore()
+    {
+        $result = [];
+        $data= self::getAll();
+        $result["0"]=['data-score' => '0'];
+        foreach($data  as $key => $item ){
+            $result[$item["id"]] = ['data-score' => $item["level_value"]]  ;
+        }
+
+        return $result;
+    }
+
 }

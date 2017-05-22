@@ -143,4 +143,39 @@ class Control extends \yii\db\ActiveRecord
             ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
     }
 
+    static public function getCheckoutWorkAll($control_id)
+    {
+        $result =[];
+        $checkoutArr =[];
+        $workArr =[];
+        $competenceArr =[];
+        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' => $control_id])->all();
+        foreach ($checkouts as $checkout) {
+            $checkoutArr[] = [
+                'id' => $checkout->id,
+                'name' => $checkout->checkoutForm->name,
+                'quantity' => $checkout->quantity
+            ];
+            $works = CheckoutWork::find()->where(['checkout_id' => $checkout->id])->all();
+            foreach ($works as $work) {
+                $workArr[$checkout->id][] =[
+                    'id' =>$work->id, 'name' =>$work->name
+                ];
+
+                $competences = CheckoutWorkCompetence::find()->with('checkoutCompetence')->where(['checkout_work_id' => $work->id])->all();
+                foreach ($competences as $competence) {
+                    $competenceArr[$checkout->id][$work->id][] =[
+                        'id' => $competence->checkout_competence_id,
+                        'name' =>$competence->checkoutCompetence->name
+                    ];
+                }
+
+            }
+        }
+        $result["checkout"] = $checkoutArr;
+        $result["work"] = $workArr;
+        $result["competence"] = $competenceArr;
+        return $result;
+    }
+
 }

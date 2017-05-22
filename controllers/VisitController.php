@@ -6,6 +6,7 @@ use app\models\Visit;
 
 use app\models\Student;
 use app\models\VisitResult;
+use app\models\Control;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use Yii;
@@ -17,9 +18,12 @@ class VisitController extends PrepodController
         $dataProvider = new ActiveDataProvider([
             'query' => Visit::find()->with('user')->where(['control_id' => $control_id])
         ]);
+        $model = Control::find()->where(['id'=> $control_id])->one();
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'control_id' => $control_id
+            'control_id' => $control_id,
+            'model' => $model
         ]);
     }
 

@@ -9,6 +9,7 @@ use app\models\Control;
 use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
+use app\models\CheckoutCompetenceResult;
 use app\models\Visit;
 use app\models\VisitResult;
 use yii\data\ActiveDataProvider;
@@ -108,19 +109,29 @@ class ControlController extends PrepodController
 
 
 
-    public function actionRatingQuality($id,$work_id)
+    public function actionRatingQuality($id)
     {
         $model = $this->findModel($id);
-        $studentResults = Student::find()->where(['group_id'=>$model->group_id])->all();
-        $competence = CheckoutWorkCompetence::find()->with('checkoutCompetence')->where(['checkout_work_id'=> $work_id])->all();
+        $students = Student::find()->where(['group_id'=>$model->group_id])
+            ->orderBy(['name'=>'desc'])->all();
+
+        $headerData = Control::getCheckoutWorkAll($id);
+        $checkouts =$headerData["checkout"];
+        $works =$headerData["work"];
+        $competences =$headerData["competence"];
+
+        $results = CheckoutCompetenceResult::getAll($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('rating-quality', [
                 'model' => $model,
-                'studentResults' =>$studentResults,
-                'competence' =>$competence
+                'students' => $students,
+                'checkouts' => $checkouts,
+                'works' => $works,
+                'competences' => $competences,
+                'results' => $results
             ]);
         }
     }
