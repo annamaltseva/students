@@ -15,10 +15,11 @@ echo $this->render('@app/views/layouts/part/_control_header',[
 ]);
 ?>
 
-<table class="table table-striped table-hover table-bordered">
+<table class="table table-striped table-hover table-bordered" id="example">
+    <thead>
     <tr>
-        <td rowspan="3"><b>№</b></td>
-        <td rowspan="3" width="150px"><b>Студент</b></td>
+        <th rowspan="3"><b>№</b></th>
+        <th rowspan="3" width="150px"><b>Студент</b></th>
         <?php
         foreach ($checkouts as $checkout) {
             $countCell=0;
@@ -27,20 +28,24 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                     $countCell+=count($competences[$checkout["id"]][$work["id"]])-1;
                 }
             }
-
+            $kolCell = $checkout["quantity"]+$countCell;
         ?>
-            <td  colspan="<?=$checkout["quantity"]+$countCell?>" class="text-center"><?=$checkout["name"]?> - <b><?=$checkout["quantity"]?> </b>шт.</td>
+            <th
+                <?php if ($kolCell>1)  echo ' colspan="'.$kolCell.'" '; ?>
+
+                class="text-center"><?=$checkout["name"]?> - <b><?=$checkout["quantity"]?> </b>шт.</th>
         <?php
         }
         ?>
-        <td rowspan="3" class="text-center"><b>Ср. балл</b></td>
-        <td rowspan="3" class="text-center"><b>Итого</b></td>
+        <th rowspan="3" class="text-center"><b>Ср. балл</b></th>
     </tr>
     <tr class="row-work">
         <?php
         foreach ($checkouts as $checkout) {
             foreach ($works[$checkout["id"]] as $work) {
-                echo '<td colspan='. count($competences[$checkout["id"]][$work["id"]]).'" class="text-center">'.$work["name"].'</td>';
+                echo '<th ';
+                if (count($competences[$checkout["id"]][$work["id"]])>1) echo ' colspan="'. count($competences[$checkout["id"]][$work["id"]]).'"';
+                echo ' class="text-center">'.$work["name"].'</th>';
             }
         }
         ?>
@@ -51,16 +56,18 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             foreach ($works[$checkout["id"]] as $work) {
                 if (isset($competences[$checkout["id"]][$work["id"]])) {
                     foreach ($competences[$checkout["id"]][$work["id"]] as $competence) {
-                        echo '<td class="text-center">' . $competence["name"] . '</td>';
+                        echo '<th class="text-center">' . $competence["name"] . '</th>';
                     }
                 } else {
-                    echo '<td class="text-center"><span style="color:#ff0000"> Нет компетенций</span></td>';
+                    echo '<th class="text-center"><span style="color:#ff0000"> Нет компетенций</span></th>';
                 }
-
             }
         }
         ?>
     </tr>
+
+    </thead>
+    <tbody>
     <?php
     $i=1;
     foreach ($students as $student)
@@ -123,4 +130,22 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         $i++;
     }
     ?>
+    </tbody>
 </table>
+
+
+
+<?php $this->registerJs('
+$(document).ready(function() {
+        var table = $("#example").DataTable({
+        responsive: true,
+        searching: false,
+        scrollX:        true,
+        scrollCollapse: true,
+        paging:         false,
+        fixedColumns:   {
+            leftColumns: 2
+        }
+     } );
+});
+');

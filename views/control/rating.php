@@ -20,10 +20,12 @@ echo $this->render('@app/views/layouts/part/_control_header',[
 
 ?>
 
-<table class="table table-striped table-hover table-bordered">
+<table class="table table-striped table-hover table-bordered" id="example">
+    <thead>
+
     <tr>
-        <td rowspan="2"><b>№</b></td>
-        <td rowspan="2" width="150px"><b>Студент</b></td>
+        <td rowspan="2" ><b>№</b></td>
+        <td rowspan="2"  class="student-name"><b>Студент</b></td>
         <?php
         foreach ($checkouts as $checkout) {
         ?>
@@ -47,13 +49,15 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         ?>
 
     </tr>
+    </thead>
+    <tbody>
     <?php
-    $i=1;
+    $count=1;
     foreach ($students as $student)
     {
         ?>
         <tr>
-            <td><?=$i?></td>
+            <td><?=$count?></td>
             <td><?=$student->name?></td>
             <?php
             $sumRow = 0;
@@ -114,7 +118,23 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             <td class="text-center"><input type="text" size="1" id = "222_<?=$student->id?>" value="" style="text-align:right"></td>
         </tr>
         <?php
-        $i++;
+        $count++;
     }
     ?>
+    </tbody>
 </table>
+<?php $this->registerJs('
+$(document).ready(function() {
+        var table = $("#example").DataTable({
+        responsive: true,
+        searching: false,
+        scrollX:        true,
+        scrollCollapse: true,
+        paging:         false,
+        fixedColumns:   {
+            leftColumns: 2
+        }
+
+   } );
+});
+');
