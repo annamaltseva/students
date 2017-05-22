@@ -13,7 +13,6 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $group_id
  * @property integer $subject_id
  * @property integer $rating_id
- * @property string $limit_rating
  * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
@@ -50,13 +49,13 @@ class Control extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['year_attestation_id', 'group_id', 'subject_id', 'rating_id', 'limit_rating', 'user_id'], 'required'],
-            [['year_attestation_id', 'group_id', 'subject_id', 'rating_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
-            [['limit_rating'], 'number'],
+            [['year_attestation_id', 'group_id', 'subject_id', 'rating_id', 'goal_id',  'user_id'], 'required'],
+            [['year_attestation_id', 'group_id', 'subject_id', 'rating_id', 'goal_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['rating_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rating::className(), 'targetAttribute' => ['rating_id' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['goal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goal::className(), 'targetAttribute' => ['goal_id' => 'id']],
             [['year_attestation_id'], 'exist', 'skipOnError' => true, 'targetClass' => YearAttestation::className(), 'targetAttribute' => ['year_attestation_id' => 'id']],
         ];
     }
@@ -70,9 +69,9 @@ class Control extends \yii\db\ActiveRecord
             'id' => 'ID',
             'year_attestation_id' => 'Аттестация',
             'group_id' => 'Группа',
+            'goal_id' => 'Цель',
             'subject_id' => 'Предмет',
             'rating_id' => 'Метод оценки',
-            'limit_rating' => 'Минимальный балл',
             'user_id' => 'Создал',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -132,6 +131,14 @@ class Control extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Year::className(), ['id' => 'year_id'])
             ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoal()
+    {
+        return $this->hasOne(Goal::className(), ['id' => 'goal_id']);
     }
 
     /**

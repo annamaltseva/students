@@ -206,8 +206,8 @@ h1{
 .field-result:focus {
     background: greenyellow;
 }
-.table > tbody > tr > td, .table > tfoot > tr > td {
-    vertical-align: middle;
+.table > thead > tr> th, .table > tfoot > tr > td {
+    vertical-align: middle !important;
 }
 .row-competence {
     font-size: 10px;
@@ -225,6 +225,3 @@ h1{
     overflow-y: visible !important;
 }
 
-table.dataTable tbody th, table.dataTable tbody td {
-    padding: 3px 5px !important;
-}

@@ -38,6 +38,8 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         }
         ?>
         <th rowspan="3" class="text-center"><b>Ср. балл</b></th>
+        <th rowspan="3" class="text-center"><b><?=$model->goal->name?></b></th>
+
     </tr>
     <tr class="row-work">
         <?php
@@ -125,6 +127,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             }
             ?>
             <td class="text-center"><b><span id="rs_<?=$student->id?>" data-rating="<?=$sumRow?>"><?=round($sumRow/$countRow,2)?></span></b></td>
+            <td></td>
         </tr>
         <?php
         $i++;

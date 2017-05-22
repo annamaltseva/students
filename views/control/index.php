@@ -34,8 +34,8 @@ $this->title = "Контроль успешности обучения";
             'label' =>'Метод оценки'
         ],
         [
-            'attribute' => 'limit_rating',
-            'label' =>'Мин. балл'
+            'attribute' => 'goal.name',
+            'label' =>'Цель'
         ],
         [
             'attribute' => 'user.name',
@@ -56,7 +56,7 @@ $this->title = "Контроль успешности обучения";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {work} {rating} {visit} {visit-rating} {delete} ',
+            'template' => '{update} {diapason} {work} {rating} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -108,6 +108,16 @@ $this->title = "Контроль успешности обучения";
                         ]), [
                         'title' => 'Формы контроля',
                      ]);
+                },
+                'diapason' => function ($url, $model) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-resize-horizontal"></span>',
+                        Url::to([
+                            '/diapason/index',
+                            'control_id' => $model->id
+                        ]), [
+                        'title' => 'Диапазоны оценок',
+                    ]);
                 },
                 'competence' => function ($url, $model) {
                     if ($model->rating_id==1) {

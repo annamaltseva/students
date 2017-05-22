@@ -21,7 +21,7 @@ class ControlController extends PrepodController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Control::find()->with('year','user','subject','group','rating')
+            'query' => Control::find()->with('year','user','subject','group','rating','goal')
         ]);
         return $this->render('index',[
             'dataProvider'=> $dataProvider

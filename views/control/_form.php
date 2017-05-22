@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use app\models\Group;
 use app\models\Subject;
 use app\models\Rating;
-use app\models\CheckoutForm;
+use app\models\Goal;
 use app\models\YearAttestation;
 use yii\helpers\ArrayHelper;
 
@@ -51,7 +51,12 @@ if ($model->isNewRecord) {
                 'prompt' => 'Выберите метод оценки ...'
             ]);
         ?>
-        <?= $form->field($model, 'limit_rating')->textInput(['type' => 'number']) ?>
+        <?= $form->field($model, 'goal_id')
+            ->dropDownList(ArrayHelper::map(Goal::getAll(), 'id', 'name'), [
+                'class'=>'form-control',
+                'prompt' => 'Выберите цель ...'
+            ]);
+        ?>
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить', ['class' => 'btn btn-success']) ?>
             <?= Html::a( '<span class="glyphicon glyphicon-ban-circle"></span> Отмена', Yii::$app->request->referrer,['class' => 'btn btn-success']);?>
