@@ -225,3 +225,7 @@ h1{
     overflow-y: visible !important;
 }
 
+table.dataTable tbody th, table.dataTable tbody td
+{
+    padding: 3px 3px !important;
+}

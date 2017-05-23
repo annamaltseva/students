@@ -5,7 +5,11 @@ use yii\helpers\Url;
 
 $this->title = "Контроль успешности обучения";
 ?>
-
+<div class="row">
+    <div class="col-md-12">
+        <?= Html::a('Добавить', ['create','control_id' => $control_id], ['class' => 'printBtn']) ?>
+    </div>
+</div>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
@@ -56,7 +60,7 @@ $this->title = "Контроль успешности обучения";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {diapason} {work} {rating} {visit} {visit-rating} {delete} ',
+            'template' => '{update} {range} {work} {rating} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -109,11 +113,11 @@ $this->title = "Контроль успешности обучения";
                         'title' => 'Формы контроля',
                      ]);
                 },
-                'diapason' => function ($url, $model) {
+                'range' => function ($url, $model) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-resize-horizontal"></span>',
                         Url::to([
-                            '/diapason/index',
+                            '/range/index',
                             'control_id' => $model->id
                         ]), [
                         'title' => 'Диапазоны оценок',

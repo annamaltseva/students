@@ -6,6 +6,7 @@ use app\models\Checkout;
 use app\models\CheckoutResult;
 use app\models\CheckoutWorkCompetence;
 use app\models\Control;
+use app\models\Range;
 use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
@@ -72,6 +73,7 @@ class ControlController extends PrepodController
         $results = CheckoutResult::getAll($id);
         $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' =>$model->id])->all();
         $visits = VisitResult::getSumAll($id);
+        $ranges = Range::getAll($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -81,7 +83,8 @@ class ControlController extends PrepodController
                 'students' =>$students,
                 'checkouts' =>$checkouts,
                 'results' =>$results,
-                'visits' => $visits
+                'visits' => $visits,
+                'ranges' => $ranges
             ]);
         }
     }

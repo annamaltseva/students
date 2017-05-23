@@ -1,12 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use app\models\Group;
-use app\models\Subject;
-use app\models\Rating;
-use app\models\CheckoutForm;
-use app\models\YearAttestation;
+use yii\web\View;
 use yii\helpers\ArrayHelper;
 use yii\widgets\MaskedInput;
 
@@ -17,6 +12,27 @@ $this->title = "Количественная оценка";
 echo $this->render('@app/views/layouts/part/_control_header',[
     'model' => $model
 ]);
+
+$strJS =' var range=[];';
+//$strJS =' var ar = '. json_encode($ranges,JSON_FORCE_OBJECT).';';
+$i=0;
+foreach ($ranges as $range) {
+    $strJS.= 'range['.$i.'] ={id:"'.$range->id.'",start_rating:"'.$range->start_rating.'",end_rating:"'.$range->end_rating.'" };';
+    $i++;
+}
+$strJS.='function getRageID(score) {
+                for (i=0; i < range.length;i++){
+                    if (eval(score) >= eval(range[i]["start_rating"]) && eval(score) <= eval(range[i]["end_rating"])){
+                        return range[i]["id"];
+                    }
+                }
+                return \'\';
+            }
+    ';
+?>
+
+
+<?php $this->registerJs($strJS,View::POS_HEAD);
 
 ?>
 
@@ -92,10 +108,13 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                                             sum_row = sum_row +eval(row[i].value)
                                         }
                                      }
-
                                      sum_row = sum_row +eval($("#res_'.$student->id.'").data("rating"));
 
-                                     $("#rs_'.$student->id.'").val(sum_row);
+                                     $("#rs_'.$student->id.'").html(sum_row);
+                                     rating_id =getRageID(sum_row);
+                                     if (rating_id =="") {alert("Количество баллов вне диапазона");return;}
+                                     $("#rating_'.$student->id.'").val(rating_id);
+
                                    })
                                    .fail(function() {
                                       alert( "error" );
@@ -112,8 +131,21 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             }
             ?>
             <td class="text-center"><b><span id="res_<?=$student->id?>" data-rating="<?=$sumVisit?>"><?=$sumVisit?></span></b></td>
-            <td class="text-center"><input type="text" size="1" id = "rs_<?=$student->id?>" value="<?=$sumRow+$sumVisit?>" style="text-align:right"></td>
-            <td class="text-center"><input type="text" size="1" id = "222_<?=$student->id?>" value="" style="text-align:right"></td>
+            <td class="text-center"><b><span id="rs_<?=$student->id?>"><?=$sumRow+$sumVisit?></span></b</td>
+            <td class="text-center">
+                <?= Html::dropDownList('rating_'.$student->id, null,
+                    ArrayHelper::map($ranges,
+                       'id',
+                       function($modellist) {
+                           return $modellist["rating"].' - (от '.$modellist["start_rating"].' до '.$modellist["end_rating"].' баллов) - '.$modellist["description"];
+                       }
+                    ),
+                    [
+                        'class' => 'form-control competence-level',
+                        'prompt' => 'Выберите оценку ...',
+                        'id' => 'rating_'.$student->id
+                ]) ?>
+            </td>
         </tr>
         <?php
         $count++;
@@ -121,7 +153,9 @@ echo $this->render('@app/views/layouts/part/_control_header',[
     ?>
     </tbody>
 </table>
+
 <?php $this->registerJs('
+
 $(document).ready(function() {
         var table = $("#example").DataTable({
         responsive: true,
