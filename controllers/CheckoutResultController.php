@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\CheckoutCompetenceResult;
 use app\models\CheckoutResult;
+use app\models\ControlResult;
 use app\models\Visit;
 use app\models\VisitResult;
 use Yii;
@@ -94,6 +95,38 @@ class CheckoutResultController extends PrepodController
         }
     }
 
+    public function actionSetControlResult($student_id, $control_id, $score, $range_id)
+    {
+        $model = ControlResult::find()->where([
+            'student_id' => $student_id,
+            'control_id' => $control_id,
+        ])->one();
 
+        if ($range_id!="") {
+            if (is_null($model)) {
+                $model = new ControlResult();
+            }
+            $model->control_id = $control_id;
+            $model->student_id = $student_id;
+            $model->range_id = $range_id;
+            $model->score = $score;
+            $model->user_id = Yii::$app->user->identity->id;
+
+            if ($model->save()) {
+                return '';
+            } else {
+                return 'Ошибка сохранения, обратитесь к разработчику';
+            }
+        } else {
+            if (!is_null($model)) {
+                if ($model->delete()) {
+                    return '';
+                } else {
+                    return 'Ошибка удаления, обратитесь к разработчику';
+                }
+            }
+            return '';
+        }
+    }
 
 }

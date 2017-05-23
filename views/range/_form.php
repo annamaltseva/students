@@ -2,12 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\CheckoutForm;
-use yii\helpers\ArrayHelper;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Person */
-/* @var $form yii\widgets\ActiveForm */
+use yii\widgets\MaskedInput;
 
 if ($model->isNewRecord) {
     $this->title = "Добавление формы контроля";
@@ -22,8 +17,23 @@ if ($model->isNewRecord) {
         <?php $form = ActiveForm::begin(); ?>
         <?= $form->field($model, 'rating')?>
         <?= $form->field($model, 'description')->textInput() ?>
-        <?= $form->field($model, 'start_rating')->textInput(['type' => 'number']) ?>
-        <?= $form->field($model, 'end_rating')->textInput(['type' => 'number']) ?>
+        <?= $form->field($model, 'start_rating')->widget(\yii\widgets\MaskedInput::className(),
+            [
+                'clientOptions' => [
+                    'alias' =>  'decimal',
+                    'groupSeparator' => ',',
+                    'autoGroup' => true
+            ]
+        ]);?>
+        <?= $form->field($model, 'end_rating')->widget(\yii\widgets\MaskedInput::className(),
+            [
+                'clientOptions' => [
+                    'alias' =>  'decimal',
+                    'groupSeparator' => ',',
+                    'autoGroup' => true,
+                    'style' =>'text-align:left !important;'
+                ]
+            ]);?>
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить', ['class' => 'btn btn-success']) ?>
             <?= Html::a( '<span class="glyphicon glyphicon-ban-circle"></span> Отмена', Yii::$app->request->referrer,['class' => 'btn btn-success']);?>

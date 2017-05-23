@@ -42,7 +42,7 @@ echo $this->render('_header',[
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {competence} {rating} {delete}',
+            'template' => '{update} {competence} {delete}',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:100px;'],
             'buttons' => [
@@ -66,17 +66,6 @@ echo $this->render('_header',[
                             'work_id'=>$model->id
                         ]), [
                         'title' => 'Компетенции по работе',
-                    ]);
-                },
-                'rating' => function ($url, $model) {
-                    return Html::a(
-                       '<span class="glyphicon glyphicon-star"></span>',
-                       Url::to([
-                            'rating-quality',
-                           'id' => $model->checkout_id,
-                           'work_id'=>$model->id
-                       ]), [
-                       'title' => 'Уровни',
                     ]);
                 },
                 'delete' => function ($url, $model) {

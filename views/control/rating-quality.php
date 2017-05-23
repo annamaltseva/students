@@ -1,18 +1,31 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\web\View;
 use app\models\CompetenceLevel;
 use yii\helpers\ArrayHelper;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Person */
-/* @var $form yii\widgets\ActiveForm */
 
 $this->title = "Качественная оценка";
 echo $this->render('@app/views/layouts/part/_control_header',[
     'model' => $model
 ]);
+
+$strJS =' var range=[];';
+$i=0;
+foreach ($ranges as $range) {
+    $strJS.= 'range['.$i.'] ={id:"'.$range->id.'",start_rating:"'.$range->start_rating.'",end_rating:"'.$range->end_rating.'" };';
+    $i++;
+}
+$strJS.='function getRageID(score) {
+                for (i=0; i < range.length;i++){
+                    if (eval(score) >= eval(range[i]["start_rating"]) && eval(score) <= eval(range[i]["end_rating"])){
+                        return range[i]["id"];
+                    }
+                }
+                return \'\';
+            }
+    ';
+$this->registerJs($strJS,View::POS_HEAD);
 ?>
 
 <table class="table table-striped table-hover table-bordered" id="example">
@@ -114,6 +127,12 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                                                  }
                                                  val = Math.round((sum_row/count_level) * 100) / 100;
                                                  $("#rs_'.$student->id.'").html(val);
+
+                                                 rating_id =getRageID(val);
+                                                 if (rating_id =="") {alert("Количество баллов вне диапазона");return;}
+                                                 $("#rating_'.$student->id.'").val(rating_id);
+                                                 $("#rating_'.$student->id.'").change();
+
                                                })
                                                .fail(function() {
                                                   alert( "error" );
@@ -125,9 +144,34 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                     }
                 }
             }
+            $rangeID =null;
+            if (isset($controlResults[$model->id][$student->id])) {
+                $rangeID = $controlResults[$model->id][$student->id]["range_id"];
+            }
             ?>
             <td class="text-center"><b><span id="rs_<?=$student->id?>" data-rating="<?=$sumRow?>"><?=round($sumRow/$countRow,2)?></span></b></td>
-            <td></td>
+            <td class="text-center">
+                <?= Html::dropDownList('rating_'.$student->id, $rangeID,
+                    ArrayHelper::map($ranges,
+                        'id',
+                        function($modellist) {
+                            return $modellist["rating"].' - (от '.$modellist["start_rating"].' до '.$modellist["end_rating"].' баллов) - '.$modellist["description"];
+                        }
+                    ),
+                    [
+                        'class' => 'form-control competence-level',
+                        'prompt' => 'Выберите оценку ...',
+                        'id' => 'rating_'.$student->id,
+                        'onchange'=>'
+                             $.post("index.php?r=checkout-result/set-control-result&student_id='.$student->id.'&control_id='.$model->id.'&score="+$("#rs_'.$student->id.'").html()+"&range_id="+$(this).val(),
+                             function(data){
+                                if (data!="") alert (data);
+                             })
+                             .fail(function() {
+                                alert( "error" );
+                             });'
+                    ]) ?>
+            </td>
         </tr>
         <?php
         $i++;
@@ -148,6 +192,7 @@ $(document).ready(function() {
         paging:         false,
         fixedColumns:   {
             leftColumns: 2
+
         }
      } );
 });

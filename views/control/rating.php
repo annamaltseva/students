@@ -5,16 +5,12 @@ use yii\web\View;
 use yii\helpers\ArrayHelper;
 use yii\widgets\MaskedInput;
 
-/* @var $this yii\web\View */
-/* @var $form yii\widgets\ActiveForm */
-
 $this->title = "Количественная оценка";
 echo $this->render('@app/views/layouts/part/_control_header',[
     'model' => $model
 ]);
 
 $strJS =' var range=[];';
-//$strJS =' var ar = '. json_encode($ranges,JSON_FORCE_OBJECT).';';
 $i=0;
 foreach ($ranges as $range) {
     $strJS.= 'range['.$i.'] ={id:"'.$range->id.'",start_rating:"'.$range->start_rating.'",end_rating:"'.$range->end_rating.'" };';
@@ -29,16 +25,11 @@ $strJS.='function getRageID(score) {
                 return \'\';
             }
     ';
-?>
-
-
-<?php $this->registerJs($strJS,View::POS_HEAD);
-
+$this->registerJs($strJS,View::POS_HEAD);
 ?>
 
 <table class="table table-striped table-hover table-bordered" id="example">
     <thead>
-
     <tr>
         <td rowspan="2" ><b>№</b></td>
         <td rowspan="2"  class="student-name"><b>Студент</b></td>
@@ -62,7 +53,6 @@ $strJS.='function getRageID(score) {
             }
         }
         ?>
-
     </tr>
     </thead>
     <tbody>
@@ -82,7 +72,6 @@ $strJS.='function getRageID(score) {
             }
 
             foreach ($checkouts as $checkout) {
-
                 for ($i=1;$i<=$checkout->quantity;$i++)
                 {
                     //echo'<td class="text-center"><input type="text" size="1" name="res_'.$result->id.'_'.$checkout->id.'_'.$i.'"></td>';
@@ -114,13 +103,12 @@ $strJS.='function getRageID(score) {
                                      rating_id =getRageID(sum_row);
                                      if (rating_id =="") {alert("Количество баллов вне диапазона");return;}
                                      $("#rating_'.$student->id.'").val(rating_id);
-
+                                     $("#rating_'.$student->id.'").change();
                                    })
                                    .fail(function() {
                                       alert( "error" );
                                    })
                                 ;'
-
                         ],
                         'clientOptions' => [
                             'alias' =>  'decimal',
@@ -129,11 +117,15 @@ $strJS.='function getRageID(score) {
                     echo '</td>';
                 }
             }
+            $rangeID =null;
+            if (isset($controlResults[$model->id][$student->id])) {
+                $rangeID = $controlResults[$model->id][$student->id]["range_id"];
+            }
             ?>
             <td class="text-center"><b><span id="res_<?=$student->id?>" data-rating="<?=$sumVisit?>"><?=$sumVisit?></span></b></td>
             <td class="text-center"><b><span id="rs_<?=$student->id?>"><?=$sumRow+$sumVisit?></span></b</td>
             <td class="text-center">
-                <?= Html::dropDownList('rating_'.$student->id, null,
+                <?= Html::dropDownList('rating_'.$student->id, $rangeID,
                     ArrayHelper::map($ranges,
                        'id',
                        function($modellist) {
@@ -143,7 +135,15 @@ $strJS.='function getRageID(score) {
                     [
                         'class' => 'form-control competence-level',
                         'prompt' => 'Выберите оценку ...',
-                        'id' => 'rating_'.$student->id
+                        'id' => 'rating_'.$student->id,
+                        'onchange'=>'
+                             $.post("index.php?r=checkout-result/set-control-result&student_id='.$student->id.'&control_id='.$model->id.'&score="+$("#rs_'.$student->id.'").html()+"&range_id="+$(this).val(),
+                             function(data){
+                                if (data!="") alert (data);
+                             })
+                             .fail(function() {
+                                alert( "error" );
+                             });'
                 ]) ?>
             </td>
         </tr>
