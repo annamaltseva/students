@@ -206,7 +206,7 @@ h1{
 .field-result:focus {
     background: greenyellow;
 }
-.table > thead > tr> th, .table > tfoot > tr > td {
+.table > thead > tr> th, .table > tbody > tr > td {
     vertical-align: middle !important;
 }
 .row-competence {
