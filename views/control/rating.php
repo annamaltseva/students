@@ -32,7 +32,7 @@ $this->registerJs($strJS,View::POS_HEAD);
     <thead>
     <tr>
         <td rowspan="2" ><b>№</b></td>
-        <td rowspan="2"  class="student-name"><b>Студент</b></td>
+        <td rowspan="2" ><b>Студент</b></td>
         <?php
         foreach ($checkouts as $checkout) {
         ?>
@@ -74,7 +74,6 @@ $this->registerJs($strJS,View::POS_HEAD);
             foreach ($checkouts as $checkout) {
                 for ($i=1;$i<=$checkout->quantity;$i++)
                 {
-                    //echo'<td class="text-center"><input type="text" size="1" name="res_'.$result->id.'_'.$checkout->id.'_'.$i.'"></td>';
                     echo '<td class="text-center">';
                     $val = '';
                     if (isset($results[$student->id][$checkout->id][$i])) {
@@ -160,7 +159,7 @@ $(document).ready(function() {
         var table = $("#example").DataTable({
         responsive: true,
         searching: false,
-        scrollX:        true,
+        scrollX: true,
         scrollCollapse: true,
         paging:         false,
         fixedColumns:   {

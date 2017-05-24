@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $rating
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -30,7 +31,7 @@ class Subject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'rating'], 'required'],
             [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];
@@ -44,6 +45,7 @@ class Subject extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Наименование',
+            'rating' => 'Балл за посещение',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

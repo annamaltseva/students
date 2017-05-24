@@ -28,7 +28,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         <?php
         foreach ($visits as $visit) {
             ?>
-            <td  class="text-center"><?=Yii::$app->formatter->asDate($visit->date, "php:d.m.Y");?> <b>(<?=$visit->rating?>)</b></td>
+            <td  class="text-center"><?=Yii::$app->formatter->asDate($visit->date, "php:d.m.Y");?> <b>(<?=$visit->subject->rating?>)</b></td>
         <?php
         }
         ?>
@@ -61,7 +61,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                         $val,
                          [
                             'class' =>'field-result',
-                            'data-value' =>$visit->rating,
+                            'data-value' =>$visit->subject->rating,
                             'onchange'=>'
                                   $.post("index.php?r=checkout-result/set-visit-result&student_id='.$student->id.'&visit_id='.$visit->id.'&result="+$(this).prop("checked")+"",
                                   function(data){

@@ -40,7 +40,7 @@ class CheckoutResultController extends PrepodController
             }
             $model->visit_id = $visit->id;
             $model->student_id = $student_id;
-            $model->rating = $visit->rating;
+            $model->rating = $visit->subject->rating;
             $model->user_id = Yii::$app->user->identity->id;
 
             if ($model->save()) {

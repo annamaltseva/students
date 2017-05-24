@@ -23,7 +23,8 @@ class ControlController extends PrepodController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Control::find()->with('year','user','subject','group','rating','goal')
+            'query' => Control::find()->with('year','user','subject','group','rating','goal'),
+            'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC]]
         ]);
         return $this->render('index',[
             'dataProvider'=> $dataProvider
@@ -99,7 +100,7 @@ class ControlController extends PrepodController
             ->where(['group_id'=>$model->group_id])
             ->orderBy(['name'=>'desc'])->all();
         $results = VisitResult::getAll($id);
-        $visits = Visit::find()->where(['control_id' =>$model->id])->all();
+        $visits = Visit::find()->with('subject')->where(['control_id' =>$model->id])->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

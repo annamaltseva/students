@@ -24,9 +24,11 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             'format'    => [ 'date', 'php:d.m.Y' ],
             'label' =>'Дата'
         ],
+
         [
-            'attribute' => 'rating',
-            'label' =>'Балл'
+            'attribute' => 'subject.rating',
+            'label' =>'Балл за посещение',
+            'contentOptions' => ['style' => 'width:50px;', 'class'=>'text-center']
         ],
         'description',
         [

@@ -11,7 +11,6 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $id
  * @property string $date
  * @property integer $control_id
- * @property string $rating
  * @property string $description
  * @property integer $user_id
  * @property integer $created_at
@@ -49,10 +48,9 @@ class Visit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'control_id', 'rating', 'user_id'], 'required'],
+            [['date', 'control_id', 'user_id'], 'required'],
             [['date'], 'safe'],
             [['control_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
-            [['rating'], 'number'],
             [['description'], 'string', 'max' => 255],
             [['control_id'], 'exist', 'skipOnError' => true, 'targetClass' => Control::className(), 'targetAttribute' => ['control_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -70,7 +68,6 @@ class Visit extends \yii\db\ActiveRecord
             'year_attestation_id' => 'Аттестация',
             'group_id' => 'Группа',
             'subject_id' => 'Предмет',
-            'rating' => 'Балл за посещение',
             'description' => 'Примечание',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
@@ -107,5 +104,14 @@ class Visit extends \yii\db\ActiveRecord
     public function getControl()
     {
         return $this->hasOne(Control::className(), ['id' => 'control_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubject()
+    {
+        return $this->hasOne(Subject::className(), ['id' => 'subject_id'])
+            ->viaTable('control', ['id' => 'control_id']);
     }
 }

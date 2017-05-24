@@ -32,16 +32,20 @@ $this->registerJs($strJS,View::POS_HEAD);
     <thead>
     <tr>
         <th rowspan="3"><b>№</b></th>
-        <th rowspan="3" width="150px"><b>Студент</b></th>
+        <th rowspan="3"><b>Студент</b></th>
         <?php
         foreach ($checkouts as $checkout) {
             $countCell=0;
-            foreach ($works[$checkout["id"]] as $work) {
-                if (count($competences[$checkout["id"]][$work["id"]])>1) {
-                    $countCell+=count($competences[$checkout["id"]][$work["id"]])-1;
+            $countWork =0;
+            if (isset($works[$checkout["id"]])) {
+                $countWork = $checkout["quantity"];
+                foreach ($works[$checkout["id"]] as $work) {
+                    if (count($competences[$checkout["id"]][$work["id"]]) > 1) {
+                        $countCell += count($competences[$checkout["id"]][$work["id"]]) - 1;
+                    }
                 }
             }
-            $kolCell = $checkout["quantity"]+$countCell;
+            $kolCell = $countWork + $countCell;
         ?>
             <th
                 <?php if ($kolCell>1)  echo ' colspan="'.$kolCell.'" '; ?>
@@ -57,10 +61,16 @@ $this->registerJs($strJS,View::POS_HEAD);
     <tr class="row-work">
         <?php
         foreach ($checkouts as $checkout) {
-            foreach ($works[$checkout["id"]] as $work) {
-                echo '<th ';
-                if (count($competences[$checkout["id"]][$work["id"]])>1) echo ' colspan="'. count($competences[$checkout["id"]][$work["id"]]).'"';
-                echo ' class="text-center">'.$work["name"].'</th>';
+            if (isset($works[$checkout["id"]])) {
+                foreach ($works[$checkout["id"]] as $work) {
+                    echo '<th ';
+                    if (count($competences[$checkout["id"]][$work["id"]]) > 1) {
+                        echo ' colspan="' . count($competences[$checkout["id"]][$work["id"]]) . '"';
+                    }
+                    echo ' class="text-center">' . $work["name"] . '</th>';
+                }
+            } else {
+                echo '<th class="text-center"><span style="color:#ff0000"> Нет работ</span></th>';
             }
         }
         ?>
@@ -68,14 +78,18 @@ $this->registerJs($strJS,View::POS_HEAD);
     <tr class="row-competence">
         <?php
         foreach ($checkouts as $checkout) {
-            foreach ($works[$checkout["id"]] as $work) {
-                if (isset($competences[$checkout["id"]][$work["id"]])) {
-                    foreach ($competences[$checkout["id"]][$work["id"]] as $competence) {
-                        echo '<th class="text-center">' . $competence["name"] . '</th>';
+            if (isset($works[$checkout["id"]])) {
+                foreach ($works[$checkout["id"]] as $work) {
+                    if (isset($competences[$checkout["id"]][$work["id"]])) {
+                        foreach ($competences[$checkout["id"]][$work["id"]] as $competence) {
+                            echo '<th class="text-center">' . $competence["name"] . '</th>';
+                        }
+                    } else {
+                        echo '<th class="text-center"><span style="color:#ff0000"> Нет компетенций</span></th>';
                     }
-                } else {
-                    echo '<th class="text-center"><span style="color:#ff0000"> Нет компетенций</span></th>';
                 }
+            } else {
+                echo '<th class="text-center"><span style="color:#ff0000"> Нет компетенций</span></th>';
             }
         }
         ?>
@@ -95,29 +109,31 @@ $this->registerJs($strJS,View::POS_HEAD);
             $sumRow =0;
             $countRow =0;
             foreach ($checkouts as $checkout) {
-                foreach ($works[$checkout["id"]] as $work) {
-                    if (isset($competences[$checkout["id"]][$work["id"]])) {
-                        foreach ($competences[$checkout["id"]][$work["id"]] as $competence) {
-                            $val =null;
-                            if (isset($results[$student->id][$work["id"]][$competence["id"]])) {
-                                $val =$results[$student->id][$work["id"]][$competence["id"]];
-                                $sumRow += $val["value"];
-                                $val = $val["id"];
-                                $countRow++;
-                            }
-                            echo '<td class="text-center">' . Html::dropDownList('res_'.$student->id.'_'.$work["id"].'_'.$competence["id"], $val,
-                                ArrayHelper::map(CompetenceLevel::getAll(), 'id', 'name'),[
-                                        'class' => 'form-control competence-level',
-                                        'options' => CompetenceLevel::getScore(),
-                                        'id' =>'res_'.$student->id.'_'.$work["id"].'_'.$competence["id"],
-                                        'prompt' => 'Выберите уровень ...',
-                                        'onchange'=>'
-                                              $.post("index.php?r=checkout-result/set-result-quality&student_id='.$student->id.'&competence_id='.$competence["id"].'&work_id='.$work["id"].'&level_id="+$(this).val()+"",
+                if (isset($works[$checkout["id"]])) {
+                    foreach ($works[$checkout["id"]] as $work) {
+                        if (isset($competences[$checkout["id"]][$work["id"]])) {
+                            foreach ($competences[$checkout["id"]][$work["id"]] as $competence) {
+                                $val = null;
+                                if (isset($results[$student->id][$work["id"]][$competence["id"]])) {
+                                    $val = $results[$student->id][$work["id"]][$competence["id"]];
+                                    $sumRow += $val["value"];
+                                    $val = $val["id"];
+                                    $countRow++;
+                                }
+                                echo '<td class="text-center">' . Html::dropDownList('res_' . $student->id . '_' . $work["id"] . '_' . $competence["id"],
+                                        $val,
+                                        ArrayHelper::map(CompetenceLevel::getAll(), 'id', 'name'), [
+                                            'class' => 'form-control competence-level',
+                                            'options' => CompetenceLevel::getScore(),
+                                            'id' => 'res_' . $student->id . '_' . $work["id"] . '_' . $competence["id"],
+                                            'prompt' => 'Выберите уровень ...',
+                                            'onchange' => '
+                                              $.post("index.php?r=checkout-result/set-result-quality&student_id=' . $student->id . '&competence_id=' . $competence["id"] . '&work_id=' . $work["id"] . '&level_id="+$(this).val()+"",
                                               function(data){
                                                  if (data!="") alert (data);
                                                  sum_row = 0;
                                                  count_level = 0;
-                                                 row=$("select[name^=res_'.$student->id.']");
+                                                 row=$("select[name^=res_' . $student->id . ']");
                                                  for (i=0;i<row.length;i++) {
                                                  val = $(row[i]).find(":selected").data("score");
                                                     if (val!=undefined){
@@ -126,30 +142,35 @@ $this->registerJs($strJS,View::POS_HEAD);
                                                     }
                                                  }
                                                  val = Math.round((sum_row/count_level) * 100) / 100;
-                                                 $("#rs_'.$student->id.'").html(val);
+                                                 $("#rs_' . $student->id . '").html(val);
 
                                                  rating_id =getRageID(val);
                                                  if (rating_id =="") {alert("Количество баллов вне диапазона");return;}
-                                                 $("#rating_'.$student->id.'").val(rating_id);
-                                                 $("#rating_'.$student->id.'").change();
+                                                 $("#rating_' . $student->id . '").val(rating_id);
+                                                 $("#rating_' . $student->id . '").change();
 
                                                })
                                                .fail(function() {
                                                   alert( "error" );
                                                }) ;'
-                                ]) . '</td>';
+                                        ]) . '</td>';
+                            }
+                        } else {
+                            echo '<td class="text-center row-competence"><span style="color:#ff0000"> -</span></td>';
                         }
-                    } else {
-                        echo '<td class="text-center row-competence"><span style="color:#ff0000"> -</span></td>';
                     }
+                } else {
+                    echo '<td class="text-center row-competence"><span style="color:#ff0000"> -</span></td>';
                 }
             }
             $rangeID =null;
             if (isset($controlResults[$model->id][$student->id])) {
                 $rangeID = $controlResults[$model->id][$student->id]["range_id"];
             }
+            $avgResult = 0;
+            if ($countRow!=0) {$avgResult = round($sumRow/$countRow,2);}
             ?>
-            <td class="text-center"><b><span id="rs_<?=$student->id?>" data-rating="<?=$sumRow?>"><?=round($sumRow/$countRow,2)?></span></b></td>
+            <td class="text-center"><b><span id="rs_<?=$student->id?>" data-rating="<?=$sumRow?>"><?=$avgResult?></span></b></td>
             <td class="text-center">
                 <?= Html::dropDownList('rating_'.$student->id, $rangeID,
                     ArrayHelper::map($ranges,

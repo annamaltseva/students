@@ -221,11 +221,17 @@ h1{
     padding: 3px 3px;
     width:70px;
 }
+
 .DTFC_LeftBodyLiner {
     overflow-y: visible !important;
 }
 
-table.dataTable tbody th, table.dataTable tbody td
-{
-    padding: 3px 3px !important;
+.table {width:100% !important;}
+/*
+.table td {
+    padding: 3px  !important;
 }
+table.dataTable thead th, table.dataTable thead td {
+    padding: 3px  !important;
+}
+*/

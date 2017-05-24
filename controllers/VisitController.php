@@ -16,7 +16,7 @@ class VisitController extends PrepodController
     public function actionIndex($control_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Visit::find()->with('user')->where(['control_id' => $control_id])
+            'query' => Visit::find()->with('user','subject')->where(['control_id' => $control_id])
         ]);
         $model = Control::find()->where(['id'=> $control_id])->one();
 
