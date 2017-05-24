@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\SignupForm;
 use app\models\User;
+use app\models\UserSubject;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use Yii;
@@ -93,6 +94,41 @@ class TeacherController extends AdminController
         }
     }
 
+    public function actionAccess($id)
+    {
+        $model = $this->findModel($id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => UserSubject::find()->with('subject')
+        ]);
+
+        return $this->render('access',[
+            'dataProvider'=> $dataProvider,
+            'model' => $model
+        ]);
+    }
+
+    public function actionAccessCreate($id)
+    {
+        $model = new UserSubject();
+        $model->user_id = $id;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['access','id' => $id]);
+        } else {
+            return $this->render('_form_access', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionAccessDelete($id, $access_id)
+    {
+        $model = $this->findAccessModel($access_id);
+
+        if ($model->delete()) {
+            return $this->redirect(['access','id' => $id]);
+        }
+    }
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -103,6 +139,15 @@ class TeacherController extends AdminController
     protected function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена!');
+        }
+    }
+
+    protected function findAccessModel($id)
+    {
+        if (($model = UserSubject::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

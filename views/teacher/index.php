@@ -42,7 +42,7 @@ $this->title = "Преподаватели";
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {password} {delete} ',
+                'template' => '{update} {password} {access} {delete} ',
                 'header' => 'Действия',
                 'contentOptions' => ['style' => 'width:100px;'],
                 'buttons' => [
@@ -54,6 +54,16 @@ $this->title = "Преподаватели";
                                 'id' => $model->id
                             ]),                            [
                              'title' => 'Password',
+                        ]);
+                    },
+                    'access' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-book"></span>',
+                            Url::to([
+                                'access',
+                                'id' => $model->id
+                            ]),                            [
+                            'title' => 'Доступ к предметам',
                         ]);
                     },
                 ]
