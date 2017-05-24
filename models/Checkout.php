@@ -13,6 +13,7 @@ use Yii;
  * @property integer $checkout_form_id
  * @property integer $quantity
  * @property integer $rating_id
+ * @property integer $score
  * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
@@ -45,6 +46,7 @@ class Checkout extends AppActiveRecord
         return [
             [['checkout_form_id', 'quantity', 'user_id','control_id' ], 'required'],
             [['checkout_form_id', 'quantity', 'user_id', 'control_id', 'created_at', 'updated_at'], 'integer'],
+            [['score'], 'number'],
             [['checkout_form_id'], 'exist', 'skipOnError' => true, 'targetClass' => CheckoutForm::className(), 'targetAttribute' => ['checkout_form_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -59,6 +61,7 @@ class Checkout extends AppActiveRecord
             'id' => 'ID',
             'quantity' => 'Количество',
             'rating_id' => 'Метод оценки',
+            'score' => 'Балл',
             'checkout_form_id' => 'Форма контроля',
             'user_id' => 'User ID',
             'created_at' => 'Created At',

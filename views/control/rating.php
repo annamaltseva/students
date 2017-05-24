@@ -36,7 +36,15 @@ $this->registerJs($strJS,View::POS_HEAD);
         <?php
         foreach ($checkouts as $checkout) {
         ?>
-        <td colspan="<?=$checkout->quantity?>" class="text-center"><?=$checkout->checkoutForm->name?> - <b><?=$checkout->quantity?> </b>шт.</td>
+        <td colspan="<?=$checkout->quantity?>" class="text-center">
+            <?=$checkout->checkoutForm->name?> - <b><?=$checkout->quantity?> </b>шт.
+            <br>
+            <?php
+            if ($checkout->score) {
+                echo 'Балл по умолчанию: <b>'.$checkout->score.'</b>';
+            }
+            ?>
+        </td>
         <?php
         }
         ?>
@@ -107,7 +115,13 @@ $this->registerJs($strJS,View::POS_HEAD);
                                    .fail(function() {
                                       alert( "error" );
                                    })
-                                ;'
+                                ;',
+                            'onclick' =>'
+                                if ($(this).val()=="") {
+                                    $(this).val('.$checkout->score.');
+                                    $(this).change();
+                                }
+                            '
                         ],
                         'clientOptions' => [
                             'alias' =>  'decimal',

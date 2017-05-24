@@ -30,6 +30,10 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             'label' =>'Кол'
         ],
         [
+            'attribute' => 'score',
+            'contentOptions' => ['class' => 'text-center'],
+        ],
+        [
             'attribute' => 'user.name',
             'label' =>'Добавил'
         ],
