@@ -55,7 +55,7 @@ class RangeController extends PrepodController
         $model = $this->findModel($id);
 
         if ($model->delete()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','control_id' => $model->control_id]);
         }
     }
 
