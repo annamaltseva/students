@@ -27,4 +27,18 @@ class AppActiveRecord extends \yii\db\ActiveRecord
             TimestampBehavior::className(),
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeValidate()
+    {
+        if ($this->hasAttribute('user_id')) {
+           $this->user_id = Yii::$app->user->identity->id;
+        }
+
+        return parent::beforeValidate();
+    }
+
+
 }

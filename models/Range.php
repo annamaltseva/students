@@ -63,11 +63,6 @@ class Range extends AppActiveRecord
         ];
     }
 
-    public function beforeValidate() {
-        $this->user_id = Yii::$app->user->identity->id;
-        return parent::beforeValidate();
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
