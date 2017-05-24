@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
+
 
 /**
  * This is the model class for table "user_subject".
@@ -17,7 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Subject $subject
  * @property User $user
  */
-class UserSubject extends \yii\db\ActiveRecord
+class UserSubject extends AppActiveRecord
 {
     /**
      * @inheritdoc
@@ -25,16 +25,6 @@ class UserSubject extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'user_subject';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
     }
 
     /**

@@ -59,9 +59,28 @@ class Subject extends \yii\db\ActiveRecord
         return $this->hasMany(Checkout::className(), ['subject_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserSubjects()
+    {
+        return $this->hasMany(UserSubject::className(), ['subject_id' => 'id']);
+    }
+
     public static function getAll()
     {
-        $query = self::find()->orderBy(['name'=>'desc']);
+        if (User::roleCurrentUser()=='admin') {
+            $query = self::find()->orderBy(['name' => 'desc']);
+        }
+        else {
+            $query = self::find()
+                ->joinWith([
+                    'userSubjects' => function ($query)  {
+                        $query->onCondition(['user_subject.user_id' => Yii::$app->user->identity->id]);
+                    },
+                ], true, 'INNER JOIN')
+                ->orderBy(['name' => 'desc']);
+        }
         return $query->all();
     }
 }

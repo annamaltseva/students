@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "checkout_competence_result".
@@ -23,7 +22,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Student $student
  * @property User $user
  */
-class CheckoutCompetenceResult extends \yii\db\ActiveRecord
+class CheckoutCompetenceResult extends AppActiveRecord
 {
     /**
      * @inheritdoc
@@ -31,16 +30,6 @@ class CheckoutCompetenceResult extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'checkout_competence_result';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
     }
 
     /**

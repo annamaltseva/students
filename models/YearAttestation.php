@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use yii\behaviors\TimestampBehavior;
 use Yii;
 
 /**
@@ -20,7 +19,7 @@ use Yii;
  * @property User $user
  * @property Year $year
  */
-class YearAttestation extends \yii\db\ActiveRecord
+class YearAttestation extends AppActiveRecord
 {
     /**
      * @inheritdoc
@@ -29,17 +28,6 @@ class YearAttestation extends \yii\db\ActiveRecord
     {
         return 'year_attestation';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
 
     /**
      * @inheritdoc

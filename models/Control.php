@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "control".
@@ -23,7 +22,7 @@ use yii\behaviors\TimestampBehavior;
  * @property User $user
  * @property YearAttestation $yearAttestation
  */
-class Control extends \yii\db\ActiveRecord
+class Control extends AppActiveRecord
 {
     /**
      * @inheritdoc
@@ -31,16 +30,6 @@ class Control extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'control';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
+
 
 
 /**
@@ -21,7 +21,7 @@ use yii\behaviors\TimestampBehavior;
  * @property User $user
  * @property Visit $visit
  */
-class VisitResult extends \yii\db\ActiveRecord
+class VisitResult extends AppActiveRecord
 {
     /**
      * @inheritdoc
@@ -29,16 +29,6 @@ class VisitResult extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'visit_result';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
     }
 
     /**

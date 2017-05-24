@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "range".
@@ -21,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Control $control
  * @property User $user
  */
-class Range extends \yii\db\ActiveRecord
+class Range extends AppActiveRecord
 {
     /**
      * @inheritdoc
@@ -29,16 +28,6 @@ class Range extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'range';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
     }
 
     /**
