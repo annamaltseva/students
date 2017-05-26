@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\SignupForm;
 use app\models\User;
+use app\models\UserGroup;
 use app\models\UserSubject;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
@@ -129,6 +130,44 @@ class TeacherController extends AdminController
         }
     }
 
+
+    public function actionGroup($id)
+    {
+        $model = $this->findModel($id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => UserGroup::find()->with('group')
+        ]);
+
+        return $this->render('group',[
+            'dataProvider'=> $dataProvider,
+            'model' => $model
+        ]);
+    }
+
+    public function actionGroupCreate($id)
+    {
+        $model = new UserGroup();
+        $model->user_id = $id;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['group','id' => $id]);
+        } else {
+            return $this->render('_form_group', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionGroupDelete($id, $group_id)
+    {
+        $model = $this->findGroupModel($group_id);
+
+        if ($model->delete()) {
+            return $this->redirect(['group','id' => $id]);
+        }
+    }
+
+
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -154,4 +193,12 @@ class TeacherController extends AdminController
         }
     }
 
+    protected function findGroupModel($id)
+    {
+        if (($model = UserGroup::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена!');
+        }
+    }
 }

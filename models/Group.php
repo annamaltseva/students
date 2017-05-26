@@ -70,9 +70,29 @@ class Group extends AppActiveRecord
         return $this->hasMany(Student::className(), ['group_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserGroups()
+    {
+        return $this->hasMany(UserGroup::className(), ['group_id' => 'id']);
+    }
+
     public static function getAll()
     {
-        $query = self::find();
+        if (User::roleCurrentUser()=='admin') {
+            $query = self::find()->orderBy(['name' => 'desc']);
+        }
+        else {
+            $query = self::find()
+                ->joinWith([
+                    'userGroups' => function ($query)  {
+                        $query->onCondition(['user_group.user_id' => Yii::$app->user->identity->id]);
+                    },
+                ], true, 'INNER JOIN')
+                ->orderBy(['name' => 'desc']);
+        }
+
         return $query->all();
     }
 
