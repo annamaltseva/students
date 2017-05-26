@@ -20,6 +20,7 @@ class m170526_095743_create_control_attestation_table extends Migration
             'id' => $this->primaryKey(),
             'control_id' => $this->integer()->notNull(),
             'attestation_id' => $this->integer()->notNull(),
+            'rating_id' => $this->integer()->notNull(),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ]);
@@ -57,6 +58,26 @@ class m170526_095743_create_control_attestation_table extends Migration
             'id',
             'CASCADE'
         );
+
+        // creates index for column `rating`
+        $this->createIndex(
+            'idx-control_attestation-rating_id',
+            'control_attestation',
+            'rating_id'
+        );
+
+        // add foreign key for table `rating`
+        $this->addForeignKey(
+            'fk-control_attestation-rating_id',
+            'control_attestation',
+            'rating_id',
+            'rating',
+            'id',
+            'CASCADE'
+        );
+
+
+
     }
 
     /**

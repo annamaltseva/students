@@ -25,6 +25,7 @@ class m170526_100020_drop_control_id_column_from_checkout_table extends Migratio
         );
 
         $this->dropColumn('checkout', 'control_id');
+
     }
 
     /**
