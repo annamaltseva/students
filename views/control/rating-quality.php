@@ -103,8 +103,9 @@ $this->registerJs($strJS,View::POS_HEAD);
     {
         ?>
         <tr>
-            <td><?=$i?></td>
-            <td><?=$student->name?></td>
+            <td class="text-right"><?=$i?></td>
+            <td>
+                <?= Html::a($student->name, ['student-result-quality','control_id' => $checkout->id, 'student_id' => $student->id], ['target' => '_blank'] ) ?>
             <?php
             $sumRow =0;
             $countRow =0;

@@ -8,9 +8,9 @@ use Yii;
  * This is the model class for table "control".
  *
  * @property integer $id
- * @property integer $year_attestation_id
  * @property integer $group_id
  * @property integer $subject_id
+ * @property integer year_id
  * @property integer $rating_id
  * @property integer $user_id
  * @property integer $created_at
@@ -20,7 +20,7 @@ use Yii;
  * @property Rating $rating
  * @property Subject $subject
  * @property User $user
- * @property YearAttestation $yearAttestation
+ * @property Year $year
  */
 class Control extends AppActiveRecord
 {
@@ -38,14 +38,14 @@ class Control extends AppActiveRecord
     public function rules()
     {
         return [
-            [['year_attestation_id', 'group_id', 'subject_id', 'rating_id', 'goal_id',  'user_id'], 'required'],
-            [['year_attestation_id', 'group_id', 'subject_id', 'rating_id', 'goal_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
+            [['year_id', 'group_id', 'subject_id', 'rating_id', 'goal_id',  'user_id'], 'required'],
+            [['year_id', 'group_id', 'subject_id', 'rating_id', 'goal_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['rating_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rating::className(), 'targetAttribute' => ['rating_id' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['goal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goal::className(), 'targetAttribute' => ['goal_id' => 'id']],
-            [['year_attestation_id'], 'exist', 'skipOnError' => true, 'targetClass' => YearAttestation::className(), 'targetAttribute' => ['year_attestation_id' => 'id']],
+            [['year_id'], 'exist', 'skipOnError' => true, 'targetClass' => Year::className(), 'targetAttribute' => ['year_id' => 'id']],
         ];
     }
 
@@ -56,9 +56,9 @@ class Control extends AppActiveRecord
     {
         return [
             'id' => 'ID',
-            'year_attestation_id' => 'Аттестация',
             'group_id' => 'Группа',
             'goal_id' => 'Цель',
+            'year_id' => 'Год',
             'subject_id' => 'Предмет',
             'rating_id' => 'Метод оценки',
             'user_id' => 'Создал',
@@ -78,9 +78,26 @@ class Control extends AppActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getRating()
     {
         return $this->hasOne(Rating::className(), ['id' => 'rating_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYear()
+    {
+        return $this->hasOne(Year::className(), ['id' => 'year_id']);
     }
 
     /**
@@ -94,31 +111,6 @@ class Control extends AppActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getYearAttestation()
-    {
-        return $this->hasOne(YearAttestation::className(), ['id' => 'year_attestation_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getYear()
-    {
-        return $this->hasOne(Year::className(), ['id' => 'year_id'])
-            ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getGoal()
     {
         return $this->hasOne(Goal::className(), ['id' => 'goal_id']);
@@ -127,11 +119,11 @@ class Control extends AppActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAttestation()
+    public function getControlStatus()
     {
-        return $this->hasOne(Attestation::className(), ['id' => 'attestation_id'])
-            ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
+        return $this->hasOne(ControlStatus::className(), ['id' => 'control_status_id']);
     }
+
 
     static public function getCheckoutWorkAll($control_id)
     {

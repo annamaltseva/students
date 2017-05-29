@@ -1,7 +1,73 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: vovan
- * Date: 26.05.17
- * Time: 13:56
- */
+namespace app\controllers;
+
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
+use app\models\ControlAttestation;
+
+class ControlAttestationController extends PrepodController
+{
+    public function actionIndex($control_id)
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => ControlAttestation::find()->with( 'user', 'attestation')->where(['control_id' => $control_id]),
+            'sort' => ['defaultOrder' => ['created_at' => SORT_DESC]]
+        ]);
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'control_id' => $control_id
+        ]);
+    }
+
+    public function actionCreate($control_id)
+    {
+        $model = new ControlAttestation();
+        $model->control_id = $control_id;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index', 'control_id' => $control_id]);
+        } else {
+            return $this->render('_form', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionUpdate( $id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index','control_id' => $model->control_id]);
+        } else {
+            return $this->render('_form', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $control_id = $model->control_id;
+        if ($model->delete()) {
+            return $this->redirect(['index','control_id' => $control_id]);
+        }
+    }
+
+    /**
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return ControlAttestation the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = ControlAttestation::find($id)->where(['id'=>$id])->one()) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена!');
+        }
+    }
+}

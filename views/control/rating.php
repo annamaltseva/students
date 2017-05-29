@@ -70,7 +70,7 @@ $this->registerJs($strJS,View::POS_HEAD);
     {
         ?>
         <tr>
-            <td><?=$count?></td>
+            <td class="text-right"><?=$count?></td>
             <td><?=$student->name?></td>
             <?php
             $sumRow = 0;

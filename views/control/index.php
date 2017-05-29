@@ -22,10 +22,6 @@ $this->title = "Контроль успешности обучения";
             'label' =>'Год'
         ],
         [
-            'attribute' => 'attestation.name',
-            'label' =>'Аттестация'
-        ],
-        [
             'attribute' => 'group.name',
             'label' =>'Группа'
         ],
@@ -34,12 +30,16 @@ $this->title = "Контроль успешности обучения";
             'label' =>'Предмет'
         ],
         [
+            'attribute' => 'goal.name',
+            'label' =>'Цель'
+        ],
+        [
             'attribute' => 'rating.name',
             'label' =>'Метод оценки'
         ],
         [
-            'attribute' => 'goal.name',
-            'label' =>'Цель'
+            'attribute' => 'controlStatus.name',
+            'label' =>'Статус'
         ],
         [
             'attribute' => 'user.name',
@@ -60,7 +60,7 @@ $this->title = "Контроль успешности обучения";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {range} {work} {rating} {visit} {visit-rating} {delete} ',
+            'template' => '{update} {range} {attestation} {control-form} {rating} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -89,6 +89,21 @@ $this->title = "Контроль успешности обучения";
                         return '';
                     }
                 },
+                'attestation' => function ($url, $model) {
+                    if ($model->rating_id==1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-tasks"></span>',
+                            Url::to([
+                                '/control-attestation/index',
+                                'control_id' => $model->id
+                            ]),                            [
+                            'title' => 'Аттестации',
+                        ]);
+                    } else {
+                        return '';
+                    }
+                },
+
                 'visit-rating' => function ($url, $model) {
                     if ($model->rating_id==1) {
                         return Html::a(
@@ -103,7 +118,7 @@ $this->title = "Контроль успешности обучения";
                         return '';
                     }
                 },
-                'work' => function ($url, $model) {
+                'control-form' => function ($url, $model) {
                      return Html::a(
                         '<span class="glyphicon glyphicon-align-justify"></span>',
                         Url::to([

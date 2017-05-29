@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Group;
 use app\models\Subject;
-use app\models\Rating;
 use app\models\Goal;
-use app\models\YearAttestation;
+use app\models\Year;
 use yii\helpers\ArrayHelper;
+use app\models\Rating;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Person */
@@ -24,13 +24,10 @@ if ($model->isNewRecord) {
     <div class="col-md-6 col-sm-12 col-xs-12">
 
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'year_attestation_id')
-            ->dropDownList(ArrayHelper::map(YearAttestation::getAll(), 'id',
-                function($modellist, $defaultValue) {
-                    return $modellist["year"]["name"].'-'.$modellist["attestation"]["name"];
-                }            ), [
+        <?= $form->field($model, 'year_id')
+            ->dropDownList(ArrayHelper::map(Year::getAll(), 'id','name'  ), [
                 'class'=>'form-control',
-                'prompt' => 'Выберите аттестацию...'
+                'prompt' => 'Выберите год...'
             ]);
         ?>
         <?= $form->field($model, 'group_id')
@@ -45,16 +42,16 @@ if ($model->isNewRecord) {
                 'prompt' => 'Выберите предмет ...'
             ]);
         ?>
-        <?= $form->field($model, 'rating_id')
-            ->dropDownList(ArrayHelper::map(Rating::getAll(), 'id', 'name'), [
-                'class'=>'form-control',
-                'prompt' => 'Выберите метод оценки ...'
-            ]);
-        ?>
         <?= $form->field($model, 'goal_id')
             ->dropDownList(ArrayHelper::map(Goal::getAll(), 'id', 'name'), [
                 'class'=>'form-control',
                 'prompt' => 'Выберите цель ...'
+            ]);
+        ?>
+        <?= $form->field($model, 'rating_id')
+            ->dropDownList(ArrayHelper::map(Rating::getAll(), 'id', 'name'), [
+                'class'=>'form-control',
+                'prompt' => 'Выберите метод оценки ...'
             ]);
         ?>
         <div class="form-group">

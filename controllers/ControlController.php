@@ -23,7 +23,7 @@ class ControlController extends PrepodController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Control::find()->with('year','user','subject','group','rating','goal'),
+            'query' => Control::find()->with('year','user','subject','group','rating','goal','controlStatus'),
             'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC]]
         ]);
         return $this->render('index',[
@@ -146,6 +146,20 @@ class ControlController extends PrepodController
             ]);
         }
     }
+
+
+    public function actionClose($id)
+    {
+        $model = Control::find()->where(['id' =>$id, 'control_status_id'])->one();
+        if ($model !== null) {
+            $model->control_status_id = 2;
+            $model->save();
+            return $this->redirect(['index']);
+        } else {
+            throw new NotFoundHttpException('Запрашиваемая компетенция по работе не найдена!');
+        }
+    }
+
 
 
     public function actionWork($id)
@@ -317,7 +331,7 @@ class ControlController extends PrepodController
      */
     protected function findModel($id)
     {
-        if (($model = Control::find($id)->with('year','attestation','subject','group')->where(['id'=>$id])->one()) !== null) {
+        if (($model = Control::find($id)->with('year','subject','group')->where(['id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

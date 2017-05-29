@@ -12,33 +12,20 @@ class m170526_100952_drop_year_attestation_id_column_from_control_table extends 
      */
     public function up()
     {
-        // drops foreign key for table `year_attestation`
-        $this->dropForeignKey(
-            'fk-control-year_attestation_id',
-            'control'
-        );
+        /*        // drops foreign key for table `year_attestation`
+                $this->dropForeignKey(
+                    'fk-control-year_attestation_id',
+                    'control'
+                );
 
-        // drops index for column `year_attestation_id`
-        $this->dropIndex(
-            'idx-control-year_attestation_id',
-            'control'
-        );
+                // drops index for column `year_attestation_id`
+                $this->dropIndex(
+                    'idx-control-year_attestation_id',
+                    'control'
+                );
 
-        // drops foreign key for table `rating`
-        $this->dropForeignKey(
-            'fk-control-rating_id',
-            'control'
-        );
-
-        // drops index for column `rating_id`
-        $this->dropIndex(
-            'idx-control-rating_id',
-            'control'
-        );
-
-        $this->dropColumn('control', 'year_attestation_id');
-        $this->dropColumn('control', 'rating_id');
-
+                $this->dropColumn('control', 'year_attestation_id');
+        */
 
     }
 
