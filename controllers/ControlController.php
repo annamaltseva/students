@@ -6,6 +6,7 @@ use app\models\Checkout;
 use app\models\CheckoutResult;
 use app\models\CheckoutWorkCompetence;
 use app\models\Control;
+use app\models\ControlAttestation;
 use app\models\ControlResult;
 use app\models\Range;
 use app\models\Student;
@@ -73,7 +74,8 @@ class ControlController extends PrepodController
             ->where(['group_id'=>$model->group_id])
             ->orderBy(['name'=>'desc'])->all();
         $results = CheckoutResult::getAll($id);
-        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' =>$model->id])->all();
+        $attestations =ControlAttestation::find()->where(['control_id']);
+        $checkouts = null;//Checkout::find()->with('checkoutForm')->where(['control_id' =>$model->id])->all();
         $visits = VisitResult::getSumAll($id);
         $ranges = Range::getAll($id);
         $controlResults = ControlResult::getAll($id);
@@ -84,6 +86,7 @@ class ControlController extends PrepodController
             return $this->render('rating', [
                 'model' => $model,
                 'students' =>$students,
+                'attestations' => $attestations,
                 'checkouts' =>$checkouts,
                 'results' =>$results,
                 'visits' => $visits,

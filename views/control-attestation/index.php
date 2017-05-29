@@ -43,7 +43,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {control-form} {delete} ',
+            'template' => '{update} {control-form} {rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -57,6 +57,18 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                         'title' => 'Формы контроля',
                     ]);
                 },
+                'rating' => function ($url, $model) {
+                    $action = ($model->control->rating_id==1)? 'rating': 'rating-quality';
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-star"></span>',
+                        Url::to([
+                            $action,
+                            'id' => $model->id
+                        ]),                            [
+                        'title' => 'Оценивание',
+                    ]);
+                },
+
 
             ]
 

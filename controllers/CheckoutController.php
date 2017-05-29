@@ -21,11 +21,12 @@ class CheckoutController extends PrepodController
             'query' => Checkout::find()->with('user','controlAttestation.attestation')->where(['control_attestation_id' => $control_attestation_id])
         ]);
 
-        $model = ControlAttestation::find()->with('control')->where(['id'=> $control_attestation_id])->one();
+        $model = ControlAttestation::find()->with('control','attestation')->where(['id'=> $control_attestation_id])->one();
         return $this->render('index',[
             'dataProvider'=> $dataProvider,
             'control_attestation_id' => $control_attestation_id,
-            'model' => $model->control
+            'model' => $model->control,
+            'attestation' => $model->attestation
         ]);
     }
 
@@ -48,7 +49,7 @@ class CheckoutController extends PrepodController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'control_id' => $model->control_id]);
+            return $this->redirect(['index', 'control_attestation_id' => $model->control_attestation_id]);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -61,7 +62,7 @@ class CheckoutController extends PrepodController
         $model = $this->findModel($id);
 
         if ($model->delete()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','control_attestation_id' => $model->control_attestation_id]);
         }
     }
 
@@ -268,7 +269,7 @@ class CheckoutController extends PrepodController
      */
     protected function findModel($id)
     {
-        if (($model = Checkout::find($id)->with('control')->where(['id'=>$id])->one()) !== null) {
+        if (($model = Checkout::find($id)->with('controlAttestation')->where(['id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

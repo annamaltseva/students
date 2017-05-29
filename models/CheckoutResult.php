@@ -60,6 +60,33 @@ class CheckoutResult extends AppActiveRecord
         ];
     }
 
+    public function afterSave()
+    {
+        $score= ControlAttestation::find()->joinWith('checkouts.checkoutResults')->where(['control_attestation_id'=>$this->checkout->control_attestation_id,'student_id' =>$this->student_id])->sum('checkout_result.score') ;
+        $model = ControlAttestationResult::find()->where(['student_id' =>$this->student_id, 'control_attestation_id' =>$this->checkout->control_attestation_id])->one();
+        if (is_null($model)) {
+            $model = new ControlAttestationResult();
+            $model->student_id = $this->student_id;
+            $model->control_attestation_id = $this->checkout->control_attestation_id;
+        }
+        $model->score = $score;
+        $model->save();
+    }
+
+
+    public function afterDelete()
+    {
+        $score= ControlAttestation::find()->joinWith('checkouts.checkoutResults')->where(['control_attestation_id'=>$this->checkout->control_attestation_id,'student_id' =>$this->student_id])->sum('checkout_result.score') ;
+        $model = ControlAttestationResult::find()->where(['student_id' =>$this->student_id, 'control_attestation_id' =>$this->checkout->control_attestation_id])->one();
+        if (is_null($model)) {
+            $model = new ControlAttestationResult();
+            $model->student_id = $this->student_id;
+            $model->control_attestation_id = $this->checkout->control_attestation_id;
+        }
+        $model->score = $score;
+        $model->save();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -84,11 +111,11 @@ class CheckoutResult extends AppActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public static function getAll($controlID)
+    public static function getAll($controlAttestationID)
     {
         $result=[];
 
-        $checkouts = Checkout::find()->where(['control_id'=>$controlID])->all();
+        $checkouts = Checkout::find()->where(['control_attestation_id'=>$controlAttestationID])->all();
         foreach ($checkouts as $checkout) {
             $checkoutResults = self::find()->where(['checkout_id' => $checkout->id])->all();
             foreach ($checkoutResults as $checkoutResult) {

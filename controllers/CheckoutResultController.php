@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\CheckoutCompetenceResult;
 use app\models\CheckoutResult;
+use app\models\ControlAttestationResult;
 use app\models\ControlResult;
 use app\models\Visit;
 use app\models\VisitResult;
@@ -14,18 +15,29 @@ class CheckoutResultController extends PrepodController
     public function actionSetResult($student_id, $checkout_id, $work_num, $result)
     {
         $model = CheckoutResult::find()->where(['student_id' =>$student_id, 'checkout_id' =>$checkout_id, 'work_num'=>$work_num])->one();
-        if (is_null($model)) {
-            $model = new CheckoutResult();
-        }
-        $model->student_id = $student_id;
-        $model->checkout_id = $checkout_id;
-        $model->work_num = $work_num;
-        $model->score = $result;
+        if ($result!="") {
+            if (is_null($model)) {
+                $model = new CheckoutResult();
+            }
+            $model->student_id = $student_id;
+            $model->checkout_id = $checkout_id;
+            $model->work_num = $work_num;
+            $model->score = $result;
 
-        if ($model->save()) {
-            return '';
+            if ($model->save()) {
+                return '';
+            } else {
+                return 'Ошибка сохранения, обратитесь к разработчику';
+            }
         } else {
-            return 'Ошибка сохранения, обратитесь к разработчику';
+            if (!is_null($model)) {
+                if ($model->delete()) {
+                    return '';
+                } else {
+                    return 'Ошибка удаления, обратитесь к разработчику';
+                }
+            }
+            return '';
         }
     }
 
@@ -129,4 +141,31 @@ class CheckoutResultController extends PrepodController
         }
     }
 
+    public function actionSetAttestationResult($student_id, $control_attestation_id , $result)
+    {
+        $model = ControlAttestationResult::find()->where(['student_id' =>$student_id, 'control_attestation_id' =>$control_attestation_id, ])->one();
+        if ($result!="") {
+            if (is_null($model)) {
+                $model = new ControlAttestationResult();
+            }
+            $model->student_id = $student_id;
+            $model->control_attestation_id = $control_attestation_id;
+            $model->score = $result;
+
+            if ($model->save()) {
+                return '';
+            } else {
+                return 'Ошибка сохранения, обратитесь к разработчику';
+            }
+        } else {
+            if (!is_null($model)) {
+                if ($model->delete()) {
+                    return '';
+                } else {
+                    return 'Ошибка удаления, обратитесь к разработчику';
+                }
+            }
+            return '';
+        }
+    }
 }

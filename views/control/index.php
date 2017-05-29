@@ -60,21 +60,10 @@ $this->title = "Контроль успешности обучения";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {range} {attestation} {rating} {visit} {visit-rating} {delete} ',
+            'template' => '{update} {range} {attestation} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
-                'rating' => function ($url, $model) {
-                    $action = ($model->rating_id==1)? 'rating': 'rating-quality';
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-star"></span>',
-                            Url::to([
-                                $action,
-                                'id' => $model->id
-                            ]),                            [
-                            'title' => 'Оценивание',
-                        ]);
-                },
                 'visit' => function ($url, $model) {
                     if ($model->rating_id==1) {
                         return Html::a(
@@ -90,7 +79,6 @@ $this->title = "Контроль успешности обучения";
                     }
                 },
                 'attestation' => function ($url, $model) {
-                    if ($model->rating_id==1) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-tasks"></span>',
                             Url::to([
@@ -99,9 +87,6 @@ $this->title = "Контроль успешности обучения";
                             ]),                            [
                             'title' => 'Аттестации',
                         ]);
-                    } else {
-                        return '';
-                    }
                 },
 
                 'visit-rating' => function ($url, $model) {

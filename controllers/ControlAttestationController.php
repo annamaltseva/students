@@ -1,11 +1,18 @@
 <?php
 namespace app\controllers;
 
+use app\models\ControlAttestationResult;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\ControlAttestation;
 use app\models\Control;
+use app\models\Student;
+use app\models\CheckoutResult;
+use app\models\VisitResult;
+use app\models\Range;
+use app\models\ControlResult;
+use app\models\Checkout;
 
 class ControlAttestationController extends PrepodController
 {
@@ -58,6 +65,41 @@ class ControlAttestationController extends PrepodController
         }
     }
 
+
+    public function actionRating($id)
+    {
+        $model = $this->findModel($id);
+        $students = Student::find()
+            ->where(['group_id'=>$model->control->group_id])
+            ->orderBy(['name'=>'desc'])->all();
+        $results = CheckoutResult::getAll($id);
+        $firstAttestation = ControlAttestation::find()->with('checkouts')->where(['control_id' =>$model->control_id, 'attestation_id'=>1])->one();
+        $firstAttestationResult = ControlAttestationResult::getAll($firstAttestation->id);
+        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_attestation_id' =>$id])->all();
+        $visits = VisitResult::getSumAll($id);
+        $ranges = Range::getAll($model->control->id);
+        $controlResults = ControlResult::getAll($model->control->id);
+
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('rating', [
+                'model' => $model->control,
+                'attestation' => $model,
+                'students' =>$students,
+          //      'attestations' => $attestations,
+                'checkouts' =>$checkouts,
+                'results' =>$results,
+                'visits' => $visits,
+                'ranges' => $ranges,
+                'controlResults' => $controlResults,
+                'firstAttestationResult' => $firstAttestationResult,
+                'firstAttestation' => $firstAttestation
+            ]);
+        }
+    }
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -67,7 +109,7 @@ class ControlAttestationController extends PrepodController
      */
     protected function findModel($id)
     {
-        if (($model = ControlAttestation::find($id)->where(['id'=>$id])->one()) !== null) {
+        if (($model = ControlAttestation::find($id)->with('control','attestation')->where(['id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

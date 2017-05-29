@@ -4,10 +4,17 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = "Формы контроля";
-echo $this->render('@app/views/layouts/part/_control_header',[
-    'model' => $model
-]);
 ?>
+<div class="row">
+    <div class="col-md-12 text-right">
+        <?= Html::a('К аттестациям ', ['/control-attestation/index', 'control_id'=>$model->id], ['class' => '']) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-1 col-sm-3"><b>Группа:</b></div><div class="col-md-3 col-sm-9"><?=$model->group->name?></div>
+    <div class="col-md-1 col-sm-3"><b>Предмет:</b></div><div class="col-md-3 col-sm-9"><?=$model->subject->name?></div>
+    <div class="col-md-1 col-sm-3"><b>Аттестация:</b></div><div class="col-md-3 col-sm-9"><?=$attestation->name?></div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <?= Html::a('Добавить', ['create','control_attestation_id' => $control_attestation_id], ['class' => 'printBtn']) ?>
@@ -19,10 +26,6 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         [
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => ['style' => 'width:40px;']
-        ],
-        [
-            'attribute' => 'controlAttestation.attestation.name',
-            'label' =>'Аттестация'
         ],
         [
             'attribute' => 'checkoutForm.name',
