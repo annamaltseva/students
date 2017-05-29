@@ -5,18 +5,21 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\ControlAttestation;
+use app\models\Control;
 
 class ControlAttestationController extends PrepodController
 {
     public function actionIndex($control_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ControlAttestation::find()->with( 'user', 'attestation')->where(['control_id' => $control_id]),
+            'query' => ControlAttestation::find()->with( 'user', 'attestation','control')->where(['control_id' => $control_id]),
             'sort' => ['defaultOrder' => ['created_at' => SORT_DESC]]
         ]);
+        $model = Control::find()->where(['id'=> $control_id])->one();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'control_id' => $control_id
+            'control_id' => $control_id,
+            'model' => $model
         ]);
     }
 

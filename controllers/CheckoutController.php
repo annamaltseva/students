@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Checkout;
 use app\models\CheckoutWorkCompetence;
+use app\models\ControlAttestation;
 use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
@@ -14,26 +15,27 @@ use Yii;
 
 class CheckoutController extends PrepodController
 {
-    public function actionIndex($control_id)
+    public function actionIndex($control_attestation_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Checkout::find()->with('user','control')->where(['control_id' => $control_id])
+            'query' => Checkout::find()->with('user','controlAttestation.attestation')->where(['control_attestation_id' => $control_attestation_id])
         ]);
-        $model = Control::find()->where(['id'=> $control_id])->one();
+
+        $model = ControlAttestation::find()->with('control')->where(['id'=> $control_attestation_id])->one();
         return $this->render('index',[
             'dataProvider'=> $dataProvider,
-            'control_id' => $control_id,
-            'model' => $model
+            'control_attestation_id' => $control_attestation_id,
+            'model' => $model->control
         ]);
     }
 
-    public function actionCreate($control_id)
+    public function actionCreate($control_attestation_id)
     {
         $model = new Checkout();
-        $model->control_id = $control_id;
+        $model->control_attestation_id = $control_attestation_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'control_id' => $control_id]);
+            return $this->redirect(['index', 'control_attestation_id' => $control_attestation_id]);
         } else {
             return $this->render('_form', [
                 'model' => $model,

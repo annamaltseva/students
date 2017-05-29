@@ -11,5 +11,5 @@ use yii\helpers\Html;
 <div class="row" style="margin-bottom: 20px">
     <div class="col-md-1 col-sm-3"><b>Группа:</b></div><div class="col-md-3 col-sm-9"><?=$model->group->name?></div>
     <div class="col-md-1 col-sm-3"><b>Предмет:</b></div><div class="col-md-3 col-sm-9"><?=$model->subject->name?></div>
-    <div class="col-md-1 col-sm-3"><b>Аттестация:</b></div><div class="col-md-3 col-sm-9"><?=$model->attestation->name?></div>
+    <div class="col-md-1 col-sm-3"><b>Метод оценки:</b></div><div class="col-md-3 col-sm-9"><?=$model->rating->name?></div>
 </div>

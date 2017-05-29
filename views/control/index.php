@@ -60,7 +60,7 @@ $this->title = "Контроль успешности обучения";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {range} {attestation} {control-form} {rating} {visit} {visit-rating} {delete} ',
+            'template' => '{update} {range} {attestation} {rating} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
@@ -117,16 +117,6 @@ $this->title = "Контроль успешности обучения";
                     } else {
                         return '';
                     }
-                },
-                'control-form' => function ($url, $model) {
-                     return Html::a(
-                        '<span class="glyphicon glyphicon-align-justify"></span>',
-                        Url::to([
-                            '/checkout/index',
-                            'control_id' => $model->id
-                        ]), [
-                        'title' => 'Формы контроля',
-                     ]);
                 },
                 'range' => function ($url, $model) {
                     return Html::a(

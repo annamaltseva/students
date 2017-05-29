@@ -4,6 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = "Аттестации по контролю";
+echo $this->render('@app/views/layouts/part/_control_header',[
+    'model' => $model
+]);
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -40,10 +43,21 @@ $this->title = "Аттестации по контролю";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {delete} ',
+            'template' => '{update} {control-form} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:50px;'],
             'buttons' => [
+                'control-form' => function ($url, $model) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-align-justify"></span>',
+                        Url::to([
+                            '/checkout/index',
+                            'control_attestation_id' => $model->id
+                        ]), [
+                        'title' => 'Формы контроля',
+                    ]);
+                },
+
             ]
 
         ]

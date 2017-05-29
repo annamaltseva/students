@@ -32,9 +32,11 @@ if ($model->isNewRecord) {
         ?>
         <?= $form->field($model, 'quantity')->textInput(['type' => 'number']) ?>
         <?php
+        /*
         if ($model->control->rating_id ==1) {
             echo $form->field($model, 'score')->textInput(['type' => 'number']);
         }
+        */
         ?>
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить', ['class' => 'btn btn-success']) ?>

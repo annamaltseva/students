@@ -10,7 +10,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
 ?>
 <div class="row">
     <div class="col-md-12">
-        <?= Html::a('Добавить', ['create','control_id' => $control_id], ['class' => 'printBtn']) ?>
+        <?= Html::a('Добавить', ['create','control_attestation_id' => $control_attestation_id], ['class' => 'printBtn']) ?>
     </div>
 </div>
 <?= GridView::widget([
@@ -19,6 +19,10 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         [
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => ['style' => 'width:40px;']
+        ],
+        [
+            'attribute' => 'controlAttestation.attestation.name',
+            'label' =>'Аттестация'
         ],
         [
             'attribute' => 'checkoutForm.name',
@@ -57,7 +61,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
             'contentOptions' => ['style' => 'width:100px;'],
             'buttons' => [
                 'rating' => function ($url, $model) {
-                    if ($model->control->rating_id==1) {
+                    if ($model->controlAttestation->control->rating_id==1) {
 
                         return Html::a(
                             '<span class="glyphicon glyphicon-star"></span>',
@@ -75,7 +79,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                 },
                 'work' => function ($url, $model) {
 
-                    if ($model->control->rating_id==1) {
+                    if ($model->controlAttestation->control->rating_id==1) {
                         return '';
                     } else {
                         return Html::a(
@@ -90,7 +94,7 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                 },
                 'competence' => function ($url, $model) {
 
-                    if ($model->control->rating_id==1) {
+                    if ($model->controlAttestation->control->rating_id==1) {
                         return '';
                     } else {
                         return Html::a(

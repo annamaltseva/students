@@ -8,23 +8,14 @@ use Yii;
  * This is the model class for table "checkout".
  *
  * @property integer $id
- * @property integer $year_attestation_id
- * @property integer $subject_id
- * @property integer $checkout_form_id
  * @property integer $quantity
- * @property integer $rating_id
  * @property integer $score
  * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
- * @property integer $group_id
- *
+ * @property integer $control_attestation_id
  * @property CheckoutForm $checkoutForm
- * @property Group $group
- * @property Rating $rating
- * @property Subject $subject
  * @property User $user
- * @property YearAttestation $yearAttestation
  * @property CheckoutCompetence[] $checkoutCompetences
  * @property CheckoutResult[] $checkoutResults
  */
@@ -44,8 +35,8 @@ class Checkout extends AppActiveRecord
     public function rules()
     {
         return [
-            [['checkout_form_id', 'quantity', 'user_id','control_id' ], 'required'],
-            [['checkout_form_id', 'quantity', 'user_id', 'control_id', 'created_at', 'updated_at'], 'integer'],
+            [['checkout_form_id', 'quantity', 'user_id','control_attestation_id' ], 'required'],
+            [['checkout_form_id', 'quantity', 'user_id', 'control_attestation_id', 'created_at', 'updated_at'], 'integer'],
             [['score'], 'number'],
             [['checkout_form_id'], 'exist', 'skipOnError' => true, 'targetClass' => CheckoutForm::className(), 'targetAttribute' => ['checkout_form_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -86,11 +77,10 @@ class Checkout extends AppActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getControl()
+    public function getControlAttestation()
     {
-        return $this->hasOne(Control::className(), ['id' => 'control_id']);
+        return $this->hasOne(ControlAttestation::className(), ['id' => 'control_attestation_id']);
     }
-
 
     /**
      * @return \yii\db\ActiveQuery
