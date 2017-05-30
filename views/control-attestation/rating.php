@@ -24,16 +24,17 @@ $strJS.='function getRageID(score) {
     ';
 $this->registerJs($strJS,View::POS_HEAD);
 ?>
-<div class="row">
-    <div class="col-md-12 text-right">
-        <?= Html::a('К аттестациям ', ['index', 'control_id'=>$attestation->control_id], ['class' => '']) ?>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <?= Html::a('К аттестациям ', ['index', 'control_id'=>$attestation->control_id], ['class' => '']) ?>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-1 col-sm-3"><b>Группа:</b></div><div class="col-md-3 col-sm-9"><?=$model->group->name?></div>
-    <div class="col-md-1 col-sm-3"><b>Предмет:</b></div><div class="col-md-3 col-sm-9"><?=$model->subject->name?></div>
-    <div class="col-md-1 col-sm-3"><b>Аттестация:</b></div><div class="col-md-3 col-sm-9"><?=$attestation->attestation->name?></div>
-</div>
+    <div class="row" style="margin-bottom: 10px;">
+
+        <div class="col-md-1 col-sm-3"><b>Группа:</b></div><div class="col-md-3 col-sm-9"><?=$model->group->name?></div>
+        <div class="col-md-1 col-sm-3"><b>Предмет:</b></div><div class="col-md-3 col-sm-9"><?=$model->subject->name?></div>
+        <div class="col-md-1 col-sm-3"><b>Аттестация:</b></div><div class="col-md-3 col-sm-9"><?=$attestation->attestation->name?></div>
+    </div>
     <table class="table table-striped table-hover table-bordered" id="example">
         <thead>
         <tr>
@@ -105,6 +106,7 @@ $this->registerJs($strJS,View::POS_HEAD);
                                     'class' => 'field-result',
                                     'onchange' => '
                                   att_res=eval($(this).val());
+                                  if ((att_res=="") || (att_res==undefined)) {att_res =0};
                                   $.post("index.php?r=checkout-result/set-attestation-result&student_id=' . $student->id . '&control_attestation_id=' . $firstAttestation->id . '&result="+$(this).val()+"",
                                   function(data){
                                      if (data!="") alert (data);
@@ -116,10 +118,7 @@ $this->registerJs($strJS,View::POS_HEAD);
                                             sum_row = sum_row +eval(row[i].value)
                                         }
                                      }
-
-
-
-                                     sum_row = sum_row +eval($("#res_' . $student->id . '").data("rating")) +att_res;
+                                     sum_row = sum_row +eval($("#res_' . $student->id . '").data("rating")) +eval(att_res);
 
 
                                      $("#rs_' . $student->id . '").html(sum_row);
@@ -149,11 +148,6 @@ $this->registerJs($strJS,View::POS_HEAD);
                         }
 
                     }
-
-
-
-
-
                     echo '</td>';
                 }
 
@@ -189,8 +183,11 @@ $this->registerJs($strJS,View::POS_HEAD);
                                         }
                                      }
                                      att_res=0;
+
                                      if ($("#fa_'.$student->id.'").data("rating")!=undefined) {att_res=$("#fa_'.$student->id.'").data("rating");}
-                                     if ($("#fa_'.$student->id.'").val()!=undefined) {att_res=$("#fa_'.$student->id.'").val();}
+                                     if ($("#fa_'.$student->id.'").val()!=undefined) {
+                                        if ($("#fa_'.$student->id.'").val()!="") {    att_res=$("#fa_'.$student->id.'").val();}
+                                     }
                                      sum_row = sum_row +eval($("#res_'.$student->id.'").data("rating"))+eval(att_res);
 
                                      $("#rs_'.$student->id.'").html(sum_row);

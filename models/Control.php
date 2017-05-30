@@ -125,13 +125,13 @@ class Control extends AppActiveRecord
     }
 
 
-    static public function getCheckoutWorkAll($control_id)
+    static public function getCheckoutWorkAll($control_attestation_id)
     {
         $result =[];
         $checkoutArr =[];
         $workArr =[];
         $competenceArr =[];
-        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' => $control_id])->all();
+        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_attestation_id' => $control_attestation_id])->all();
         foreach ($checkouts as $checkout) {
             $checkoutArr[] = [
                 'id' => $checkout->id,

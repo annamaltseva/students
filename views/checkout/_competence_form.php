@@ -7,14 +7,16 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\CheckoutCompetence */
 /* @var $form yii\widgets\ActiveForm */
 
-if ($modelWork->isNewRecord) {
+if ($modelCompetence->isNewRecord) {
     $this->title = "Добавление компетенции";
 } else {
     $this->title = "Изменение компетенции";
 }
+/*
 echo $this->render('_header',[
     'model' => $model
 ]);
+*/
 
 ?>
 

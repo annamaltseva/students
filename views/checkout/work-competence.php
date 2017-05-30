@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = "Компетенции по работе";
+
 ?>
     <div class="row">
         <div class="col-md-6">

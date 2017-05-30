@@ -4,9 +4,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = "Работы";
-echo $this->render('_header',[
+echo $this->render('_header_checkout',[
     'model' => $model
 ]);
+
 ?>
     <div class="row">
         <div class="col-md-12">

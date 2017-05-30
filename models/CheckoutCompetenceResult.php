@@ -106,6 +106,44 @@ class CheckoutCompetenceResult extends AppActiveRecord
     }
 
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        $control_attestation_id = $this->checkoutWork->checkout->control_attestation_id;
+        $score= ControlAttestation::find()->joinWith('checkouts.checkoutWork.checkoutCompetenceResults.competenceLevel')
+            ->where(['checkout.control_attestation_id'=>$control_attestation_id,'checkout_competence_result.student_id' =>$this->student_id])
+            ->average('competence_level.level_value') ;
+        $model = ControlAttestationResult::find()
+            ->where(['student_id' =>$this->student_id, 'control_attestation_id' =>$control_attestation_id])
+            ->one();
+        if (is_null($model)) {
+            $model = new ControlAttestationResult();
+            $model->student_id = $this->student_id;
+            $model->control_attestation_id = $control_attestation_id;
+        }
+        $model->score = $score;
+        $model->save();
+    }
+
+
+    public function afterDelete()
+    {
+        $control_attestation_id = $this->checkoutWork->checkout->control_attestation_id;
+        $score= ControlAttestation::find()->joinWith('checkouts.checkoutWork.checkoutCompetenceResults.competenceLevel')
+            ->where(['checkout.control_attestation_id'=>$control_attestation_id,'checkout_competence_result.student_id' =>$this->student_id])
+            ->average('competence_level.level_value') ;
+        $model = ControlAttestationResult::find()
+            ->where(['student_id' =>$this->student_id, 'control_attestation_id' =>$control_attestation_id])
+            ->one();
+        if (is_null($model)) {
+            $model = new ControlAttestationResult();
+            $model->student_id = $this->student_id;
+            $model->control_attestation_id = $control_attestation_id;
+        }
+        $model->score = $score;
+        $model->save();
+    }
+
+
     public static function getAll($controlID)
     {
         $result=[];
@@ -118,7 +156,7 @@ class CheckoutCompetenceResult extends AppActiveRecord
             }
         }
 */
-        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_id' => $controlID])->all();
+        $checkouts = Checkout::find()->with('checkoutForm')->where(['control_attestation_id' => $controlID])->all();
         foreach ($checkouts as $checkout) {
             $works = CheckoutWork::find()->where(['checkout_id' => $checkout->id])->all();
             foreach ($works as $work) {

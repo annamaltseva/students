@@ -13,6 +13,7 @@ use app\models\VisitResult;
 use app\models\Range;
 use app\models\ControlResult;
 use app\models\Checkout;
+use app\models\CheckoutCompetenceResult;
 
 class ControlAttestationController extends PrepodController
 {
@@ -20,7 +21,7 @@ class ControlAttestationController extends PrepodController
     {
         $dataProvider = new ActiveDataProvider([
             'query' => ControlAttestation::find()->with( 'user', 'attestation','control')->where(['control_id' => $control_id]),
-            'sort' => ['defaultOrder' => ['created_at' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['attestation_id' => SORT_ASC]]
         ]);
         $model = Control::find()->where(['id'=> $control_id])->one();
         return $this->render('index', [
@@ -88,7 +89,6 @@ class ControlAttestationController extends PrepodController
                 'model' => $model->control,
                 'attestation' => $model,
                 'students' =>$students,
-          //      'attestations' => $attestations,
                 'checkouts' =>$checkouts,
                 'results' =>$results,
                 'visits' => $visits,
@@ -100,6 +100,46 @@ class ControlAttestationController extends PrepodController
         }
     }
 
+    public function actionRatingQuality($id)
+    {
+        $model = $this->findModel($id);
+        $students = Student::find()
+            ->where(['group_id'=>$model->control->group_id])
+            ->orderBy(['name'=>'desc'])->all();
+
+        $firstAttestation = ControlAttestation::find()->with('checkouts')->where(['control_id' =>$model->control_id, 'attestation_id'=>1])->one();
+        $firstAttestationResult = ControlAttestationResult::getAll($firstAttestation->id);
+        $visits = VisitResult::getSumAll($id);
+        $ranges = Range::getAll($model->control->id);
+        $controlResults = ControlResult::getAll($model->control->id);
+
+
+        $headerData = Control::getCheckoutWorkAll($id);
+        $checkouts =$headerData["checkout"];
+        $works =$headerData["work"];
+        $competences =$headerData["competence"];
+
+        $results = CheckoutCompetenceResult::getAll($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('rating-quality', [
+                'model' => $model->control,
+                'attestation' => $model,
+                'works' =>$works,
+                'competences' =>$competences,
+                'students' =>$students,
+                'checkouts' =>$checkouts,
+                'results' =>$results,
+                'visits' => $visits,
+                'ranges' => $ranges,
+                'controlResults' => $controlResults,
+                'firstAttestationResult' => $firstAttestationResult,
+                'firstAttestation' => $firstAttestation
+            ]);
+        }
+    }
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

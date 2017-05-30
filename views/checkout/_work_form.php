@@ -12,9 +12,11 @@ if ($modelWork->isNewRecord) {
 } else {
     $this->title = "Изменение работы";
 }
+/*
 echo $this->render('_header',[
     'model' => $model
 ]);
+*/
 
 ?>
 

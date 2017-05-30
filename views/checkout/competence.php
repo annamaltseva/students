@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = "Компетенции";
-echo $this->render('_header',[
+echo $this->render('_header_checkout',[
     'model' => $model
 ]);
 ?>

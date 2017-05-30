@@ -60,7 +60,7 @@ class CheckoutResult extends AppActiveRecord
         ];
     }
 
-    public function afterSave()
+    public function afterSave($insert, $changedAttributes)
     {
         $score= ControlAttestation::find()->joinWith('checkouts.checkoutResults')->where(['control_attestation_id'=>$this->checkout->control_attestation_id,'student_id' =>$this->student_id])->sum('checkout_result.score') ;
         $model = ControlAttestationResult::find()->where(['student_id' =>$this->student_id, 'control_attestation_id' =>$this->checkout->control_attestation_id])->one();
