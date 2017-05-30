@@ -46,13 +46,13 @@ class CheckoutResultController extends PrepodController
         $visit = Visit::findOne($visit_id);
         $model = VisitResult::find()->where(['student_id' => $student_id, 'visit_id' => $visit_id])->one();
 
-        if ($result=="true") {
+        if ($result!="") {
             if (is_null($model)) {
                 $model = new VisitResult();
             }
             $model->visit_id = $visit->id;
             $model->student_id = $student_id;
-            $model->rating = $visit->subject->rating;
+            $model->rating = $result;
             $model->user_id = Yii::$app->user->identity->id;
 
             if ($model->save()) {

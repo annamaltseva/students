@@ -69,7 +69,9 @@ class CheckoutResult extends AppActiveRecord
             $model->student_id = $this->student_id;
             $model->control_attestation_id = $this->checkout->control_attestation_id;
         }
-        $model->score = $score;
+        $visit_score= Visit::find()->joinWith('visitResults')->where(['control_attestation_id'=>$this->checkout->control_attestation_id,'student_id' =>$this->student_id])->sum('visit_result.rating') ;
+
+        $model->score = $score+$visit_score;
         $model->save();
     }
 

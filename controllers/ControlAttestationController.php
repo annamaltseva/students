@@ -14,6 +14,7 @@ use app\models\Range;
 use app\models\ControlResult;
 use app\models\Checkout;
 use app\models\CheckoutCompetenceResult;
+use app\models\Visit;
 
 class ControlAttestationController extends PrepodController
 {
@@ -140,6 +141,30 @@ class ControlAttestationController extends PrepodController
             ]);
         }
     }
+
+
+    public function actionRatingVisit($id)
+    {
+        $model = $this->findModel($id);
+
+        $students = Student::find()
+            ->where(['group_id'=>$model->control->group_id])
+            ->orderBy(['name'=>'desc'])->all();
+        $results = VisitResult::getAll($id);
+        $visits = Visit::find()->with('controlAttestation.control.subject')->where(['control_attestation_id' =>$id])->all();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('rating-visit', [
+                'model' => $model,
+                'students' =>$students,
+                'visits' =>$visits,
+                'results' =>$results
+            ]);
+        }
+    }
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

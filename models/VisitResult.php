@@ -71,7 +71,7 @@ class VisitResult extends AppActiveRecord
         return $this->hasOne(Student::className(), ['id' => 'student_id']);
     }
 
-    /**
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
@@ -92,7 +92,7 @@ class VisitResult extends AppActiveRecord
         $result=[];
 
         $sql = 'SELECT student_id, sum(visit_result.rating) as score FROM visit  '.
-            'LEFT JOIN visit_result ON visit.id = visit_result.visit_id WHERE control_id='.$controlID.' GROUP BY student_id';
+            'LEFT JOIN visit_result ON visit.id = visit_result.visit_id WHERE control_attestation_id='.$controlID.' GROUP BY student_id';
 
         $visits = Yii::$app->db->createCommand($sql);
         $visits = $visits->queryAll();
@@ -103,11 +103,11 @@ class VisitResult extends AppActiveRecord
         return $result;
     }
 
-    public static function getAll($controlID)
+    public static function getAll($controlAttestationID)
     {
         $result=[];
 
-        $visits = Visit::find()->where(['control_id'=>$controlID])->all();
+        $visits = Visit::find()->where(['control_attestation_id'=>$controlAttestationID])->all();
         foreach ($visits as $visit) {
             $visitResults = self::find()->where(['visit_id' => $visit->id])->all();
             foreach ($visitResults as $visitResult) {

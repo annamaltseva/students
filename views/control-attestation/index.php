@@ -43,9 +43,9 @@ echo $this->render('@app/views/layouts/part/_control_header',[
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {control-form} {rating} {delete} ',
+            'template' => '{update} {control-form} {rating} {visit} {visit-rating} {delete} ',
             'header' => 'Действия',
-            'contentOptions' => ['style' => 'width:50px;'],
+            'contentOptions' => ['style' => 'width:120px;'],
             'buttons' => [
                 'control-form' => function ($url, $model) {
                     return Html::a(
@@ -67,6 +67,34 @@ echo $this->render('@app/views/layouts/part/_control_header',[
                         ]),                            [
                         'title' => 'Оценивание',
                     ]);
+                },
+                'visit' => function ($url, $model) {
+                    if ($model->control->rating_id == 1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-calendar"></span>',
+                            Url::to([
+                                '/visit/index',
+                                'control_attestation_id' => $model->id
+                            ]),                            [
+                            'title' => 'Лекции',
+                        ]);
+                    } else {
+                        return '';
+                    }
+                },
+                'visit-rating' => function ($url, $model) {
+                    if ($model->control->rating_id == 1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-star-empty"></span>',
+                            Url::to([
+                                'rating-visit',
+                                'id' => $model->id
+                            ]),                            [
+                            'title' => 'Посещаемость',
+                        ]);
+                    } else {
+                        return '';
+                    }
                 },
 
 

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\ControlAttestation;
 use app\models\Visit;
 
 use app\models\Student;
@@ -13,27 +14,27 @@ use Yii;
 
 class VisitController extends PrepodController
 {
-    public function actionIndex($control_id)
+    public function actionIndex($control_attestation_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Visit::find()->with('user','subject')->where(['control_id' => $control_id])
+            'query' => Visit::find()->with('user','controlAttestation.control.subject')->where(['control_attestation_id' => $control_attestation_id])
         ]);
-        $model = Control::find()->where(['id'=> $control_id])->one();
+        $model = ControlAttestation::find()->with('control','attestation')->where(['id'=> $control_attestation_id])->one();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'control_id' => $control_id,
+            'control_attestation_id' => $control_attestation_id,
             'model' => $model
         ]);
     }
 
-    public function actionCreate($control_id)
+    public function actionCreate($control_attestation_id)
     {
         $model = new Visit();
-        $model->control_id = $control_id;
+        $model->control_attestation_id = $control_attestation_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index','control_id' =>$control_id]);
+            return $this->redirect(['index','control_attestation_id' =>$control_attestation_id]);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -41,12 +42,12 @@ class VisitController extends PrepodController
         }
     }
 
-    public function actionUpdate($control_id,$id)
+    public function actionUpdate($control_attestation_id,$id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index','control_id' =>$control_id]);
+            return $this->redirect(['index','control_attestation_id' =>$control_attestation_id]);
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -54,15 +55,14 @@ class VisitController extends PrepodController
         }
     }
 
-    public function actionDelete($control_id,$id)
+    public function actionDelete($control_attestation_id,$id)
     {
         $model = $this->findModel($id);
 
         if ($model->delete()) {
-            return $this->redirect(['index','control_id' =>$control_id]);
+            return $this->redirect(['index','control_attestation_id' =>$control_attestation_id]);
         }
     }
-
 
     public function actionResult($id)
     {
@@ -118,7 +118,7 @@ class VisitController extends PrepodController
      */
     protected function findModel($id)
     {
-        if (($model = Visit::find()->with('control')->where(['id' =>$id])->one()) !== null) {
+        if (($model = Visit::find()->with('controlAttestation.control')->where(['id' =>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Запрашиваемая страница не найдена!');

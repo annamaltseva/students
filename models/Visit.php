@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $date
- * @property integer $control_id
+ * @property integer $control_attestation_id
  * @property string $description
  * @property integer $user_id
  * @property integer $created_at
@@ -18,7 +18,7 @@ use Yii;
  * @property Group $group
  * @property Subject $subject
  * @property User $user
- * @property YearAttestation $yearAttestation
+ * @property ControlAttestation $controlAttestation
  * @property VisitResult[] $visitResults
  */
 class Visit extends AppActiveRecord
@@ -37,11 +37,11 @@ class Visit extends AppActiveRecord
     public function rules()
     {
         return [
-            [['date', 'control_id', 'user_id'], 'required'],
+            [['date', 'control_attestation_id', 'user_id'], 'required'],
             [['date'], 'safe'],
-            [['control_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
+            [['control_attestation_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
             [['description'], 'string', 'max' => 255],
-            [['control_id'], 'exist', 'skipOnError' => true, 'targetClass' => Control::className(), 'targetAttribute' => ['control_id' => 'id']],
+            [['control_attestation_id'], 'exist', 'skipOnError' => true, 'targetClass' => ControlAttestation::className(), 'targetAttribute' => ['control_attestation_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -54,15 +54,28 @@ class Visit extends AppActiveRecord
         return [
             'id' => 'ID',
             'date' => 'Дата лекции',
-            'year_attestation_id' => 'Аттестация',
-            'group_id' => 'Группа',
-            'subject_id' => 'Предмет',
             'description' => 'Примечание',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function afterFind()
+    {
+        $this->date = date('d.m.Y',strtotime($this->date));
+
+        parent::afterFind();
+    }
+
+    public function beforeValidate()
+    {
+        $this->date = date('Y-m-d',strtotime($this->date));
+
+        return parent::beforeValidate();
+    }
+
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -84,17 +97,10 @@ class Visit extends AppActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getControl()
+    public function getControlAttestation()
     {
-        return $this->hasOne(Control::className(), ['id' => 'control_id']);
+        return $this->hasOne(ControlAttestation::className(), ['id' => 'control_attestation_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSubject()
-    {
-        return $this->hasOne(Subject::className(), ['id' => 'subject_id'])
-            ->viaTable('control', ['id' => 'control_id']);
-    }
+
 }

@@ -70,6 +70,14 @@ class ControlAttestation extends AppActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getVisits()
+    {
+        return $this->hasMany(Visit::className(), ['control_attestation_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getAttestation()
     {
         return $this->hasOne(Attestation::className(), ['id' => 'attestation_id']);
