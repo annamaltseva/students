@@ -77,7 +77,7 @@ class CheckoutWork extends AppActiveRecord
      */
     public function getCheckoutCompetenceResults()
     {
-        return $this->hasMany(CheckoutCompetenceResult::className(), ['checkout_competence_id' => 'id']);
+        return $this->hasMany(CheckoutCompetenceResult::className(), ['checkout_work_id' => 'id']);
     }
 
     /**

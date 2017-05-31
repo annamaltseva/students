@@ -112,6 +112,7 @@ class ControlAttestationController extends PrepodController
         $firstAttestationResult = ControlAttestationResult::getAll($firstAttestation->id);
         $visits = VisitResult::getSumAll($id);
         $ranges = Range::getAll($model->control->id);
+        $controlAttestationResults = ControlAttestationResult::getAll($id);
         $controlResults = ControlResult::getAll($model->control->id);
 
 
@@ -121,6 +122,7 @@ class ControlAttestationController extends PrepodController
         $competences =$headerData["competence"];
 
         $results = CheckoutCompetenceResult::getAll($id);
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -137,7 +139,8 @@ class ControlAttestationController extends PrepodController
                 'ranges' => $ranges,
                 'controlResults' => $controlResults,
                 'firstAttestationResult' => $firstAttestationResult,
-                'firstAttestation' => $firstAttestation
+                'firstAttestation' => $firstAttestation,
+                'controlAttestationResults' => $controlAttestationResults
             ]);
         }
     }

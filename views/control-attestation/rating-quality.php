@@ -183,7 +183,10 @@ $this->title = "Качественная оценка";
                                                     'prompt' => 'Выберите уровень ...',
                                                     'onchange' => '
                                                     first_ball =0;
-                                                    if ($("#fa_'.$student->id.'").val()!=undefined) {first_ball=$("#fa_'.$student->id.'").val()}
+                                                    if ($("#fa_'.$student->id.'").length>0){
+                                                        if ($("#fa_'.$student->id.'").val()!=undefined) {first_ball=$("#fa_'.$student->id.'").val()}
+                                                        if ($("#fa_'.$student->id.'").html()!="") {first_ball=$("#fa_'.$student->id.'").html()}
+                                                    }
                                               $.post("index.php?r=checkout-result/set-result-quality&student_id=' . $student->id . '&competence_id=' . $competence["id"] . '&work_id=' . $work["id"] . '&level_id="+$(this).val()+"",
                                               function(data){
                                                  //if (data!="") alert (data);
@@ -192,7 +195,7 @@ $this->title = "Качественная оценка";
                                                  row=$("select[name^=res_' . $student->id . ']");
 
                                                 final_score =eval(data);
-                                                if (eval(data)!=0) { final_score =Math.round(((eval(data)+eval(first_ball))/2)*100)/100 ;}
+                                                if (eval(first_ball)!=0) { final_score =Math.round(((eval(data)+eval(first_ball))/2)*100)/100 ;}
 
                                                  $("#rs_' . $student->id . '").html(final_score);
                                                  $("#rsh_' . $student->id . '").val(eval(data));
@@ -212,15 +215,22 @@ $this->title = "Качественная оценка";
                             echo '<td class="text-center row-competence"><span style="color:#ff0000"> -</span></td>';
                         }
                     }
-                    $avgResult =0;
+                    $TotalResult =0;
+                    $attestationResult =0;
                     if (isset($controlResults[$model->id][$student->id])) {
-                        $avgResult = $controlResults[$model->id][$student->id]["score"];
+                        $TotalResult = $controlResults[$model->id][$student->id]["score"];
+                    }
+                    if (isset($controlAttestationResults[$student->id])) {
+                        $attestationResult = $controlAttestationResults[$student->id];
+                    }
+                    if ($attestation->attestation_id==1) {
+                        $TotalResult = $attestationResult;
                     }
                     ?>
                 <td class="text-center">
-                    <b><span id="rs_<?=$student->id?>" ><?=$avgResult?></span></b>
+                    <b><span id="rs_<?=$student->id?>" ><?=$TotalResult?></span></b>
                     <?php
-                        echo Html::hiddenInput('rsh_'.$student->id,$avgResult,[
+                        echo Html::hiddenInput('rsh_'.$student->id,$attResult,[
                             'id'=> 'rsh_'.$student->id,
                             'onchange' => '
                                  $.post("index.php?r=checkout-result/set-control-result&student_id='.$student->id.'&control_id='.$model->id.'&score="+$("#rs_'.$student->id.'").html()+"&range_id=-1",
