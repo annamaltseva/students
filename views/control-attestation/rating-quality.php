@@ -7,23 +7,6 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\MaskedInput;
 
 $this->title = "Качественная оценка";
-
-$strJS =' var range=[];';
-$i=0;
-foreach ($ranges as $range) {
-    $strJS.= 'range['.$i.'] ={id:"'.$range->id.'",start_rating:"'.$range->start_rating.'",end_rating:"'.$range->end_rating.'" };';
-    $i++;
-}
-$strJS.='function getRageID(score) {
-                for (i=0; i < range.length;i++){
-                    if (eval(score) >= eval(range[i]["start_rating"]) && eval(score) <= eval(range[i]["end_rating"])){
-                        return range[i]["id"];
-                    }
-                }
-                return \'\';
-            }
-    ';
-$this->registerJs($strJS,View::POS_HEAD);
 ?>
     <div class="row">
         <div class="col-md-12 text-right">
@@ -65,7 +48,6 @@ $this->registerJs($strJS,View::POS_HEAD);
             <?php
             }
             ?>
-            <th rowspan="3" class="text-center"><b>Ср. балл</b></th>
             <th rowspan="3" class="text-center"><b><?=$model->goal->name?></b></th>
 
         </tr>
@@ -136,29 +118,22 @@ $this->registerJs($strJS,View::POS_HEAD);
                                 'options' => [
                                     'class' => 'field-result',
                                     'onchange' => '
-                                  att_res=eval($(this).val());
-                                  if ((att_res=="") || (att_res==undefined)) {att_res =0};
-                                  $.post("index.php?r=checkout-result/set-attestation-result&student_id=' . $student->id . '&control_attestation_id=' . $firstAttestation->id . '&result="+$(this).val()+"",
-                                  function(data){
+                                              att_res=eval($(this).val());
+                                              if ((att_res=="") || (att_res==undefined)) {att_res =0};
 
-                                                 if (data!="") alert (data);
-                                                 sum_row = 0;
-                                                 count_level = 0;
-                                                 row=$("select[name^=res_' . $student->id . ']");
-                                                 for (i=0;i<row.length;i++) {
-                                                 val = $(row[i]).find(":selected").data("score");
-                                                    if (val!=undefined){
-                                                        sum_row = sum_row +eval(val);
-                                                        count_level ++;
-                                                    }
+                                              $.post("index.php?r=checkout-result/set-attestation-result&student_id=' . $student->id . '&control_attestation_id=' . $firstAttestation->id . '&result="+$(this).val()+"",
+                                              function(data){
+                                                 sum_row =0;
+                                                 if (($("#rsh_' . $student->id . '").val()!="") && ($("#rsh_' . $student->id . '").val()!=undefined)){
+                                                    sum_row = eval($("#rsh_' . $student->id . '").val())
                                                  }
-                                                 val = Math.round((sum_row/count_level) * 100) / 100 + eval(att_res);
+                                                 val= sum_row;
+                                                 if (eval(att_res)!=0) {
+                                                    val=Math.round((((sum_row+att_res)/2)*100))/100;
+                                                 }
                                                  $("#rs_' . $student->id . '").html(val);
-
-                                                 rating_id =getRageID(val);
-                                                 if (rating_id =="") {alert("Количество баллов вне диапазона");return;}
-                                                 $("#rating_' . $student->id . '").val(rating_id);
-                                                 $("#rating_' . $student->id . '").change();
+                                                 $("#rsh_' . $student->id . '").val(val);
+                                                 $("#rsh_' . $student->id . '").change();
 
                                    })
                                    .fail(function() {
@@ -207,35 +182,21 @@ $this->registerJs($strJS,View::POS_HEAD);
                                                     'id' => 'res_' . $student->id . '_' . $work["id"] . '_' . $competence["id"],
                                                     'prompt' => 'Выберите уровень ...',
                                                     'onchange' => '
+                                                    first_ball =0;
+                                                    if ($("#fa_'.$student->id.'").val()!=undefined) {first_ball=$("#fa_'.$student->id.'").val()}
                                               $.post("index.php?r=checkout-result/set-result-quality&student_id=' . $student->id . '&competence_id=' . $competence["id"] . '&work_id=' . $work["id"] . '&level_id="+$(this).val()+"",
                                               function(data){
-                                                 if (data!="") alert (data);
+                                                 //if (data!="") alert (data);
                                                  sum_row = 0;
                                                  count_level = 0;
                                                  row=$("select[name^=res_' . $student->id . ']");
-                                                 for (i=0;i<row.length;i++) {
-                                                 val = $(row[i]).find(":selected").data("score");
-                                                    if (val!=undefined){
-                                                        sum_row = sum_row +eval(val);
-                                                        count_level ++;
-                                                    }
-                                                 }
-                                                 val = Math.round((sum_row/count_level) * 100) / 100;
-                                                 att_res = 0;
 
-                                                 if ($("#fa_'.$student->id.'").data("rating")!=undefined) {att_res=$("#fa_'.$student->id.'").data("rating");}
-                                                 if ($("#fa_'.$student->id.'").val()!=undefined) {
-                                                    if ($("#fa_'.$student->id.'").val()!="") {    att_res=$("#fa_'.$student->id.'").val();}
-                                                 }
+                                                final_score =eval(data);
+                                                if (eval(data)!=0) { final_score =Math.round(((eval(data)+eval(first_ball))/2)*100)/100 ;}
 
-                                                 val = val + eval(att_res);
-
-                                                 $("#rs_' . $student->id . '").html(val);
-
-                                                 rating_id =getRageID(val);
-                                                 if (rating_id =="") {alert("Количество баллов вне диапазона");return;}
-                                                 $("#rating_' . $student->id . '").val(rating_id);
-                                                 $("#rating_' . $student->id . '").change();
+                                                 $("#rs_' . $student->id . '").html(final_score);
+                                                 $("#rsh_' . $student->id . '").val(eval(data));
+                                                 $("#rsh_' . $student->id . '").change();
 
                                                })
                                                .fail(function() {
@@ -251,35 +212,31 @@ $this->registerJs($strJS,View::POS_HEAD);
                             echo '<td class="text-center row-competence"><span style="color:#ff0000"> -</span></td>';
                         }
                     }
-                    $rangeID =null;
+                    $avgResult =0;
                     if (isset($controlResults[$model->id][$student->id])) {
-                        $rangeID = $controlResults[$model->id][$student->id]["range_id"];
+                        $avgResult = $controlResults[$model->id][$student->id]["score"];
                     }
-                    $avgResult = 0;
-                    if ($countRow!=0) {$avgResult = round($sumRow/$countRow,2)+$attResult;}
                     ?>
-                <td class="text-center"><b><span id="rs_<?=$student->id?>" data-rating="<?=$sumRow?>"><?=$avgResult?></span></b></td>
                 <td class="text-center">
-                    <?= Html::dropDownList('rating_'.$student->id, $rangeID,
-                        ArrayHelper::map($ranges,
-                            'id',
-                            function($modellist) {
-                                return $modellist["rating"].' - (от '.$modellist["start_rating"].' до '.$modellist["end_rating"].' баллов) - '.$modellist["description"];
-                            }
-                        ),
-                        [
-                            'class' => 'form-control competence-level',
-                            'prompt' => 'Выберите оценку ...',
-                            'id' => 'rating_'.$student->id,
-                            'onchange'=>'
-                             $.post("index.php?r=checkout-result/set-control-result&student_id='.$student->id.'&control_id='.$model->id.'&score="+$("#rs_'.$student->id.'").html()+"&range_id="+$(this).val(),
-                             function(data){
-                                if (data!="") alert (data);
-                             })
-                             .fail(function() {
-                                alert( "error" );
-                             });'
-                        ]) ?>
+                    <b><span id="rs_<?=$student->id?>" ><?=$avgResult?></span></b>
+                    <?php
+                        echo Html::hiddenInput('rsh_'.$student->id,$avgResult,[
+                            'id'=> 'rsh_'.$student->id,
+                            'onchange' => '
+                                 $.post("index.php?r=checkout-result/set-control-result&student_id='.$student->id.'&control_id='.$model->id.'&score="+$("#rs_'.$student->id.'").html()+"&range_id=-1",
+                                 function(data){
+                                    if (data!="") alert (data);
+                                 })
+                                 .fail(function() {
+                                    alert( "error" );
+                                 });'
+
+
+
+                        ])
+                    ?>
+
+                    <input type="hidden" id="rsh1_<?=$student->id?>" value="">
                 </td>
             </tr>
             <?php

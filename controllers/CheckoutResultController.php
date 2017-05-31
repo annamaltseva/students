@@ -8,6 +8,7 @@ use app\models\ControlAttestationResult;
 use app\models\ControlResult;
 use app\models\Visit;
 use app\models\VisitResult;
+use app\models\ControlAttestation;
 use Yii;
 
 class CheckoutResultController extends PrepodController
@@ -74,7 +75,7 @@ class CheckoutResultController extends PrepodController
 
     public function actionSetResultQuality($student_id, $competence_id, $work_id, $level_id)
     {
-        $model = CheckoutCompetenceResult::find()->where([
+        $model = CheckoutCompetenceResult::find()->with('checkoutWork.checkout')->where([
             'student_id' => $student_id,
             'checkout_competence_id' => $competence_id,
             'checkout_work_id' => $work_id
@@ -91,7 +92,12 @@ class CheckoutResultController extends PrepodController
             $model->user_id = Yii::$app->user->identity->id;
 
             if ($model->save()) {
-                return '';
+                $score= ControlAttestation::find()->select('avg(competence_level.level_value) as kol')
+                    ->joinWith('checkouts.checkoutWork.checkoutCompetenceResults.competenceLevel')
+                    ->where(['checkout.control_attestation_id'=>$model->checkoutWork->checkout->control_attestation_id,'checkout_competence_result.student_id' =>$student_id])
+                    ->groupBy(['checkout_competence_id'])->average('kol') ;
+
+                return round($score,2);
             } else {
                 return 'Ошибка сохранения, обратитесь к разработчику';
             }
