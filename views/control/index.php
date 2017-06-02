@@ -60,9 +60,9 @@ $this->title = "Контроль успешности обучения";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {range} {attestation} {delete} ',
+            'template' => '{update} {range} {attestation} {generate-report} {delete} ',
             'header' => 'Действия',
-            'contentOptions' => ['style' => 'width:50px;'],
+            'contentOptions' => ['style' => 'width:100px;'],
             'buttons' => [
                 'attestation' => function ($url, $model) {
                         return Html::a(
@@ -102,6 +102,18 @@ $this->title = "Контроль успешности обучения";
                             'title' => 'Компетенции',
                         ]);
                     }
+                },
+                'generate-report' => function ($url, $model) {
+                    $action = ($model->rating_id==1)? 'generate-report': 'generate-quality-report';
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-certificate"></span>',
+                            Url::to([
+                                $action,
+                                'id' => $model->id
+                            ]), [
+                        'title' => 'Создать таблицу успеваемости',
+                        'data-confirm'=>'Вы уверенны, что хотите создать результаты успеваемости?'
+                    ]);
                 },
             ]
 

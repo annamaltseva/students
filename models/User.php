@@ -301,8 +301,7 @@ class User extends ActiveRecord implements IdentityInterface
                         'label' => 'Оценивание',
                         'items' => [
                             ['label' => 'Контроль успешности обучения', 'url' => ['/control/index']],
-                            ['label' => 'Отчет по успеваемости','url' => ['/report/index']
-                            ],
+                            ['label' => 'Отчет по успеваемости','url' => ['/report/index']],
                         ],
                     ],
                     ['label' => 'Преподаватели', 'url' => ['/teacher/index']],
@@ -328,8 +327,8 @@ class User extends ActiveRecord implements IdentityInterface
                     [
                         'label' => 'Оценивание',
                         'items' => [
-                            ['label' => 'Аттестации по годам', 'url' => ['/year-attestation/index']],
                             ['label' => 'Контроль успешности обучения', 'url' => ['/control/index']],
+                            ['label' => 'Отчет по успеваемости','url' => ['/report/index']],
                         ],
                     ],
                     [

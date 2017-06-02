@@ -13,6 +13,7 @@ use Yii;
  * @property integer year_id
  * @property integer $rating_id
  * @property integer $user_id
+ * @property integer $control_status_id
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -39,7 +40,7 @@ class Control extends AppActiveRecord
     {
         return [
             [['year_id', 'group_id', 'subject_id', 'rating_id', 'goal_id',  'user_id'], 'required'],
-            [['year_id', 'group_id', 'subject_id', 'rating_id', 'goal_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
+            [['year_id', 'group_id', 'subject_id', 'rating_id','control_status_id', 'goal_id', 'user_id', 'created_at', 'updated_at'], 'integer'],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['rating_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rating::className(), 'targetAttribute' => ['rating_id' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject_id' => 'id']],
@@ -59,6 +60,7 @@ class Control extends AppActiveRecord
             'group_id' => 'Группа',
             'goal_id' => 'Цель',
             'year_id' => 'Год',
+            'control_status_id'=> 'Статус',
             'subject_id' => 'Предмет',
             'rating_id' => 'Метод оценки',
             'user_id' => 'Создал',

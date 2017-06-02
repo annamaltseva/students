@@ -104,7 +104,12 @@ class CheckoutResultController extends PrepodController
         } else {
             if (!is_null($model)) {
                 if ($model->delete()) {
-                    return '';
+                    $score= ControlAttestation::find()->select('avg(competence_level.level_value) as kol')
+                        ->joinWith('checkouts.checkoutWork.checkoutCompetenceResults.competenceLevel')
+                        ->where(['checkout.control_attestation_id'=>$model->checkoutWork->checkout->control_attestation_id,'checkout_competence_result.student_id' =>$student_id])
+                        ->groupBy(['checkout_competence_id'])->average('kol') ;
+
+                    return round($score,2);
                 } else {
                     return 'Ошибка удаления, обратитесь к разработчику';
                 }

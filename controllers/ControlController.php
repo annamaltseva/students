@@ -7,6 +7,7 @@ use app\models\CheckoutResult;
 use app\models\CheckoutWorkCompetence;
 use app\models\Control;
 use app\models\ControlAttestation;
+use app\models\ControlAttestationReport;
 use app\models\ControlResult;
 use app\models\Range;
 use app\models\Student;
@@ -151,19 +152,31 @@ class ControlController extends PrepodController
     }
 
 
-    public function actionClose($id)
+    public function actionGenerateReport($id)
     {
-        $model = Control::find()->where(['id' =>$id, 'control_status_id'])->one();
-        if ($model !== null) {
-            $model->control_status_id = 2;
+        $model = $this->findModel($id);
+        $result =ControlAttestationReport::createReportDataQuantity($id);
+        if ($result) {
+            $model->control_status_id =3;
             $model->save();
             return $this->redirect(['index']);
         } else {
-            throw new NotFoundHttpException('Запрашиваемая компетенция по работе не найдена!');
+            throw new NotFoundHttpException('Не могу создать данные по отчету!');
         }
     }
 
-
+    public function actionGenerateQualityReport($id)
+    {
+        $model = $this->findModel($id);
+        $result =ControlAttestationReport::createReportDataQuality($id);
+        if ($result) {
+            $model->control_status_id =3;
+            $model->save();
+            return $this->redirect(['index']);
+        } else {
+            throw new NotFoundHttpException('Не могу создать данные по отчету!');
+        }
+    }
 
     public function actionWork($id)
     {
