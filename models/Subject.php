@@ -76,7 +76,7 @@ class Subject extends \yii\db\ActiveRecord
             $query = self::find()
                 ->joinWith([
                     'userSubjects' => function ($query)  {
-                        $query->onCondition(['user_subject.user_id' => Yii::$app->user->identity->id]);
+                        $query->onCondition(['user_subject.prepod_id' => Yii::$app->user->identity->id]);
                     },
                 ], true, 'INNER JOIN')
                 ->orderBy(['name' => 'desc']);

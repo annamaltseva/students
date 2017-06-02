@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $user_id
+ * @property integer $prepod_id
  * @property integer $group_id
  * @property integer $created_at
  * @property integer $updated_at
@@ -32,11 +33,11 @@ class UserGroup extends AppActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'group_id'], 'required'],
-            [['user_id', 'group_id', 'created_at', 'updated_at'], 'integer'],
+            [['prepod_id', 'group_id'], 'required'],
+            [['prepod_id', 'group_id', 'created_at', 'updated_at'], 'integer'],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['user_id', 'group_id'], 'unique', 'targetAttribute' => ['user_id', 'group_id']]
+            [['prepod_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['prepod_id' => 'id']],
+            [['prepod_id', 'group_id'], 'unique', 'targetAttribute' => ['prepod_id', 'group_id']]
         ];
     }
 
@@ -47,7 +48,7 @@ class UserGroup extends AppActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
+            'prepod_id' => 'User ID',
             'group_id' => 'Группа',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

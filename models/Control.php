@@ -126,6 +126,39 @@ class Control extends AppActiveRecord
         return $this->hasOne(ControlStatus::className(), ['id' => 'control_status_id']);
     }
 
+    public function getUserGroups()
+    {
+        return $this->hasMany(UserGroup::className(), ['group_id' => 'group_id']);
+    }
+
+    public function getUserSubjects()
+    {
+        return $this->hasMany(UserSubject::className(), ['subject_id' => 'subject_id']);
+    }
+
+
+    public static function getAll()
+    {
+        $query = self::find()->with('year','user','subject','group','rating','goal','controlStatus');
+        if (User::roleCurrentUser()!='admin') {
+
+            $query = $query
+                ->joinWith([
+                    'userGroups' => function ($query)  {
+                        $query->onCondition(['user_group.prepod_id' => Yii::$app->user->identity->id]);
+                    },
+                ], true, 'INNER JOIN')
+            ->joinWith([
+                'userSubjects' => function ($query)  {
+                    $query->onCondition(['user_subject.prepod_id' => Yii::$app->user->identity->id]);
+                },
+            ], true, 'INNER JOIN');
+        }
+
+        return $query;
+    }
+
+
 
     static public function getCheckoutWorkAll($control_attestation_id)
     {

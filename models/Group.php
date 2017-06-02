@@ -87,7 +87,7 @@ class Group extends AppActiveRecord
             $query = self::find()
                 ->joinWith([
                     'userGroups' => function ($query)  {
-                        $query->onCondition(['user_group.user_id' => Yii::$app->user->identity->id]);
+                        $query->onCondition(['user_group.prepod_id' => Yii::$app->user->identity->id]);
                     },
                 ], true, 'INNER JOIN')
                 ->orderBy(['name' => 'desc']);

@@ -99,7 +99,7 @@ class TeacherController extends AdminController
     {
         $model = $this->findModel($id);
         $dataProvider = new ActiveDataProvider([
-            'query' => UserSubject::find()->with('subject')
+            'query' => UserSubject::find()->with('subject')->where(['prepod_id' => $id])
         ]);
 
         return $this->render('access',[
@@ -111,7 +111,7 @@ class TeacherController extends AdminController
     public function actionAccessCreate($id)
     {
         $model = new UserSubject();
-        $model->user_id = $id;
+        $model->prepod_id = $id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['access','id' => $id]);
         } else {
@@ -135,7 +135,7 @@ class TeacherController extends AdminController
     {
         $model = $this->findModel($id);
         $dataProvider = new ActiveDataProvider([
-            'query' => UserGroup::find()->with('group')
+            'query' => UserGroup::find()->with('group')->where(['prepod_id' => $id])
         ]);
 
         return $this->render('group',[
@@ -147,7 +147,7 @@ class TeacherController extends AdminController
     public function actionGroupCreate($id)
     {
         $model = new UserGroup();
-        $model->user_id = $id;
+        $model->prepod_id = $id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['group','id' => $id]);
         } else {

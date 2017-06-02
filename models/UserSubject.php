@@ -10,6 +10,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $user_id
+ * @property integer $prepod_id
  * @property integer $subject_id
  * @property integer $created_at
  * @property integer $updated_at
@@ -33,11 +34,11 @@ class UserSubject extends AppActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'subject_id'], 'required'],
-            [['user_id', 'subject_id', 'created_at', 'updated_at'], 'integer'],
+            [['prepod_id', 'subject_id'], 'required'],
+            [['prepod_id', 'subject_id', 'created_at', 'updated_at'], 'integer'],
             [['user_id', 'subject_id'], 'unique', 'targetAttribute' => ['user_id', 'subject_id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['prepod_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['prepod_id' => 'id']],
         ];
     }
 
