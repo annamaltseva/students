@@ -75,18 +75,14 @@ $this->title = "Контроль успешности обучения";
                         ]);
                 },
                 'range' => function ($url, $model) {
-                    if ($model->rating_id ==1) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-resize-horizontal"></span>',
-                            Url::to([
-                                '/range/index',
-                                'control_id' => $model->id
-                            ]), [
-                            'title' => 'Диапазоны оценок',
-                        ]);
-                    } else {
-                        return '';
-                    }
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-resize-horizontal"></span>',
+                        Url::to([
+                            '/range/index',
+                            'control_id' => $model->id
+                        ]), [
+                        'title' => 'Диапазоны оценок',
+                    ]);
                 },
                 'competence' => function ($url, $model) {
                     if ($model->rating_id==1) {

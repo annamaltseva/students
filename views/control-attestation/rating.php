@@ -227,7 +227,7 @@ $this->registerJs($strJS,View::POS_HEAD);
                 <td class="text-center"><b><span id="rs_<?=$student->id?>"><?=$sumRow+$sumVisit+$attResult?></span></b</td>
                 <?php
                 if ($attestation->attestation_id==2) {
-                    ?>
+                ?>
 
                 <td class="text-center">
                     <?= Html::dropDownList('rating_'.$student->id, $rangeID,

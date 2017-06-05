@@ -109,9 +109,15 @@ class CheckoutCompetenceResult extends AppActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         $control_attestation_id = $this->checkoutWork->checkout->control_attestation_id;
-        $score= ControlAttestation::find()->joinWith('checkouts.checkoutWork.checkoutCompetenceResults.competenceLevel')
+
+        $score= ControlAttestation::find()->select('avg(competence_level.level_value) as kol')
+            ->joinWith('checkouts.checkoutWork.checkoutCompetenceResults.competenceLevel')
             ->where(['checkout.control_attestation_id'=>$control_attestation_id,'checkout_competence_result.student_id' =>$this->student_id])
-            ->average('competence_level.level_value') ;
+            ->groupBy(['checkout_competence_id'])->average('kol') ;
+
+
+
+
         $model = ControlAttestationResult::find()
             ->where(['student_id' =>$this->student_id, 'control_attestation_id' =>$control_attestation_id])
             ->one();

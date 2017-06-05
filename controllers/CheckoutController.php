@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Checkout;
+use app\models\CheckoutCompetenceResult;
 use app\models\CheckoutWorkCompetence;
 use app\models\ControlAttestation;
 use app\models\Student;
@@ -158,9 +159,10 @@ class CheckoutController extends PrepodController
 
         $model = $this->findModel($id);
         $modelWork = $this->findWork($work_id);
-
+        $workID =$modelWork->id;
 
         if ($modelWork->delete()) {
+            CheckoutCompetenceResult::deleteAll(['checkout_work_id' =>$workID]);
             return $this->redirect(['work','id' => $model->id]);
         }
     }
@@ -198,8 +200,10 @@ class CheckoutController extends PrepodController
     public function actionDeleteWorkCompetence($id, $checkout_id, $work_id)
     {
         $model = $this->findWorkCompetence($id);
+        $compID = $model->checkout_competence_id;
 
         if ($model->delete()) {
+            CheckoutCompetenceResult::deleteAll(['checkout_competence_id' =>$compID]);
             return $this->redirect(['work-competence','id' => $checkout_id, 'work_id' =>$work_id]);
         }
     }
