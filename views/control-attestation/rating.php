@@ -162,6 +162,10 @@ $this->registerJs($strJS,View::POS_HEAD);
                     {
                         echo '<td class="text-center">';
                         $val = '';
+                        $defaultScore = 0;
+                        if (isset($ratings[$checkout->id][$i])) {
+                            $defaultScore = $ratings[$checkout->id][$i];
+                        }
                         if (isset($results[$student->id][$checkout->id][$i])) {
                             $val =$results[$student->id][$checkout->id][$i];
                             $sumRow+=$val;
@@ -183,10 +187,11 @@ $this->registerJs($strJS,View::POS_HEAD);
                                         }
                                      }
                                      att_res=0;
-
-                                     if ($("#fa_'.$student->id.'").data("rating")!=undefined) {att_res=$("#fa_'.$student->id.'").data("rating");}
-                                     if ($("#fa_'.$student->id.'").val()!=undefined) {
-                                        if ($("#fa_'.$student->id.'").val()!="") {    att_res=$("#fa_'.$student->id.'").val();}
+                                     if ($("#fa_'.$student->id.'").length>0){
+                                         if (($("#fa_'.$student->id.'").data("rating")!=undefined) && ($("#fa_'.$student->id.'").data("rating")!="")) {att_res=$("#fa_'.$student->id.'").data("rating");}
+                                         if ($("#fa_'.$student->id.'").val()!=undefined) {
+                                            if ($("#fa_'.$student->id.'").val()!="") {    att_res=$("#fa_'.$student->id.'").val();}
+                                         }
                                      }
                                      sum_row = sum_row +eval($("#res_'.$student->id.'").data("rating"))+eval(att_res);
 
@@ -202,14 +207,16 @@ $this->registerJs($strJS,View::POS_HEAD);
                                       alert( "error" );
                                    })
                                 ;'
-                                /*,
+                                ,
                                 'onclick' =>'
                                 if ($(this).val()=="") {
-                                    $(this).val('.$checkout->score.');
-                                    if ('.$checkout->score.'!=0) { $(this).change();}
+                                    if ('.$defaultScore.'!=0) {
+                                        $(this).val('.$defaultScore.');
+                                        $(this).change();
+                                    }
                                 }
 
-                            '*/
+                            '
                             ],
                             'clientOptions' => [
                                 'alias' =>  'decimal',

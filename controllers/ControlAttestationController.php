@@ -81,6 +81,7 @@ class ControlAttestationController extends PrepodController
         $visits = VisitResult::getSumAll($id);
         $ranges = Range::getAll($model->control->id);
         $controlResults = ControlResult::getAll($model->control->id);
+        $ratings = ControlAttestation::getWorkScore($id);
 
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -96,7 +97,8 @@ class ControlAttestationController extends PrepodController
                 'ranges' => $ranges,
                 'controlResults' => $controlResults,
                 'firstAttestationResult' => $firstAttestationResult,
-                'firstAttestation' => $firstAttestation
+                'firstAttestation' => $firstAttestation,
+                'ratings' => $ratings
             ]);
         }
     }

@@ -19,7 +19,7 @@ class CheckoutController extends PrepodController
     public function actionIndex($control_attestation_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Checkout::find()->with('user','controlAttestation.attestation')->where(['control_attestation_id' => $control_attestation_id])
+            'query' => Checkout::find()->with('user','controlAttestation.attestation','controlAttestation.control')->where(['control_attestation_id' => $control_attestation_id])
         ]);
 
         $model = ControlAttestation::find()->with('control','attestation')->where(['id'=> $control_attestation_id])->one();

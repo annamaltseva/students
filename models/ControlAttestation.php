@@ -99,4 +99,21 @@ class ControlAttestation extends AppActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public static function getWorkScore($id)
+    {
+        $checkouts = Checkout::find()
+            ->with('checkoutRatings')
+            ->where(['control_attestation_id' =>$id])->all();
+
+        $result =[];
+
+        foreach($checkouts as $checkout) {
+            foreach ($checkout->checkoutRatings as $rating) {
+                $result[$checkout->id][$rating->work_num] = $rating->score;
+            }
+        }
+
+        return $result;
+    }
+
 }

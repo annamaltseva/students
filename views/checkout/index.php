@@ -37,10 +37,6 @@ $this->title = "Формы контроля";
             'label' =>'Кол'
         ],
         [
-            'attribute' => 'score',
-            'contentOptions' => ['class' => 'text-center'],
-        ],
-        [
             'attribute' => 'user.name',
             'label' =>'Добавил'
         ],
@@ -59,7 +55,7 @@ $this->title = "Формы контроля";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {competence} {work} {delete} ',
+            'template' => '{update} {competence} {work} {range} {delete} ',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:100px;'],
             'buttons' => [
@@ -110,6 +106,21 @@ $this->title = "Формы контроля";
                         ]);
                     }
                 },
+                'range' => function ($url, $model) {
+                    if ($model->controlAttestation->control->rating_id==1) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pushpin"></span>',
+                            Url::to([
+                                '/checkout-rating/index',
+                                'checkout_id' => $model->id
+                            ]), [
+                            'title' => 'Баллы по умолчанию',
+                        ]);
+                    } else {
+                        return '';
+                    }
+                },
+
             ]
 
         ]

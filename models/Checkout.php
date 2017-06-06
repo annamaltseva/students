@@ -132,4 +132,24 @@ class Checkout extends AppActiveRecord
         return $this->hasOne(Attestation::className(), ['id' => 'attestation_id'])
             ->viaTable('year_attestation', ['id' => 'year_attestation_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCheckoutRatings()
+    {
+        return $this->hasMany(CheckoutRating::className(), ['checkout_id' => 'id']);
+    }
+
+    public static function getWorkNumbers($id)
+    {
+        $checkout = self::findOne($id);
+        $result=[];
+        for($i = 1; $i<=$checkout->quantity; $i++)
+        {
+            $result[$i]=$i;
+        }
+
+        return $result;
+    }
 }
