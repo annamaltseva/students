@@ -31,9 +31,10 @@ class Subject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'rating'], 'required'],
+            [['name'], 'required'],
             [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'unique', 'targetAttribute' => ['name']]
         ];
     }
 

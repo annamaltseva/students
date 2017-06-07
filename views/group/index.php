@@ -36,7 +36,7 @@ $this->title = "Группы студентов";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update}',
+            'template' => '{update} {delete}',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:100px;']
         ]

@@ -11,6 +11,9 @@ class GroupController extends AdminController
 {
     public function actionIndex()
     {
+        $session = Yii::$app->session;
+        $session->set('RETURN_URL', Yii::$app->request->absoluteUrl);
+
         $dataProvider = new ActiveDataProvider([
             'query' => Group::find()->with('user')
         ]);
@@ -23,7 +26,8 @@ class GroupController extends AdminController
         $model = new Group();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
         } else {
             return $this->render('_form', [
                 'model' => $model,
@@ -36,13 +40,25 @@ class GroupController extends AdminController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
         } else {
             return $this->render('_form', [
                 'model' => $model,
             ]);
         }
     }
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->delete()) {
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
+        }
+    }
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

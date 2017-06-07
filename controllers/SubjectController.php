@@ -10,13 +10,30 @@ class SubjectController extends AdminController
 {
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Subject::find()->orderBy(['name'=>'desc']),
+        $session = Yii::$app->session;
+        $session->set('RETURN_URL', Yii::$app->request->absoluteUrl);
 
+        $dataProvider = new ActiveDataProvider([
+            'query' => Subject::find(),
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
         ]);
         return $this->render('index',[
             'dataProvider'=> $dataProvider
         ]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new Subject();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
+        } else {
+            return $this->render('_form', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionUpdate($id)
@@ -24,7 +41,8 @@ class SubjectController extends AdminController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
         } else {
             return $this->render('_form', [
                 'model' => $model,

@@ -1,10 +1,12 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 $this->title = "Предметы";
 ?>
+<div class="col-md-12">
+    <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
+</div>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
@@ -12,15 +14,8 @@ $this->title = "Предметы";
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => ['style' => 'width:50px;']
         ],
+        'id',
         'name',
-        [
-            'attribute' => 'rating',
-            'contentOptions' => [
-                'class' => 'text-center',
-                'style' => 'width:100px;'
-            ],
-            'label' =>'Балл за посещение'
-        ],
         [
             'class' => 'yii\grid\ActionColumn',
             'template' => '{update}',
