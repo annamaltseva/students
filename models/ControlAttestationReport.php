@@ -104,11 +104,12 @@ class ControlAttestationReport extends AppActiveRecord
                             INNER JOIN student st ON c.group_id = st.group_id
                             LEFT JOIN checkout_result cr ON ck.id=cr.checkout_id and st.id = cr.student_id
                             where
-                            ca.control_id= '.$controlAttestation->id.'
+                            ca.id= '.$controlAttestation->id.'
                             ) t
                             GROUP BY t.control_attestation_id,t.quantity,t.student_id
                         ) as z
                         GROUP BY z.control_attestation_id, z.student_id';
+
 
             $results = Yii::$app->db->createCommand($strSql)->queryAll();
             foreach($results as $result) {
