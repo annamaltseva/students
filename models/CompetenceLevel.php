@@ -33,6 +33,7 @@ class CompetenceLevel extends \yii\db\ActiveRecord
             [['name', 'level_value'], 'required'],
             [['level_value', 'order_field', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['level_value'], 'unique', 'targetAttribute' => ['level_value']]
         ];
     }
 
@@ -44,7 +45,7 @@ class CompetenceLevel extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Наименование',
-            'level_value' => 'Level Value',
+            'level_value' => 'Значение',
             'order_field' => 'Order Field',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

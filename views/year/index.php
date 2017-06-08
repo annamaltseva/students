@@ -17,7 +17,7 @@ $this->title = "Учебные годы";
         'name',
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update}',
+            'template' => '{update} {delete}',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:100px;'],
         ]

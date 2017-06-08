@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Group;
 use app\models\Student;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
@@ -9,25 +10,44 @@ use Yii;
 
 class StudentController extends AdminController
 {
-    public function actionIndex()
+    public function actionIndex($group_id = null)
     {
+
+        $session = Yii::$app->session;
+        $session->set('RETURN_URL', Yii::$app->request->absoluteUrl);
+
+        $query = Student::find()->with('group');
+        $groupName = null;
+        $groupID = null;
+        if (!is_null($group_id)){
+            $query = $query->where(['group_id' => $group_id]);
+            $groupModel = Group::findOne($group_id);
+            $groupName = $groupModel->name;
+            $groupID = $groupModel->id;
+        }
         $dataProvider = new ActiveDataProvider([
-            'query' => Student::find()->with('group')
+            'query' => $query
         ]);
         return $this->render('index',[
-            'dataProvider'=> $dataProvider
+            'dataProvider'=> $dataProvider,
+            'groupName' => $groupName,
+            'groupID' => $groupID
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($group_id = null)
     {
+        $session = Yii::$app->session;
+
         $model = new Student();
+        $model->group_id =$group_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect($session->get('RETURN_URL'));
         } else {
             return $this->render('_form', [
                 'model' => $model,
+                'cancelUrl' =>$session->get('RETURN_URL')
             ]);
         }
     }
@@ -35,12 +55,14 @@ class StudentController extends AdminController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $session = Yii::$app->session;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect($session->get('RETURN_URL'));
         } else {
             return $this->render('_form', [
                 'model' => $model,
+                'cancelUrl' =>$session->get('RETURN_URL')
             ]);
         }
     }
@@ -50,7 +72,8 @@ class StudentController extends AdminController
         $model = $this->findModel($id);
 
         if ($model->delete()) {
-            return $this->redirect(['index']);
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
         }
     }
     /**

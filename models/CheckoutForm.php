@@ -34,6 +34,7 @@ class CheckoutForm extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['order_field', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'unique', 'targetAttribute' => ['name']]
         ];
     }
 

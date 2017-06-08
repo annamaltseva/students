@@ -15,7 +15,7 @@ class GroupController extends AdminController
         $session->set('RETURN_URL', Yii::$app->request->absoluteUrl);
 
         $dataProvider = new ActiveDataProvider([
-            'query' => Group::find()->with('user')
+            'query' => Group::getAllProvider()->with('user')
         ]);
         return $this->render('index',[
             'dataProvider'=> $dataProvider

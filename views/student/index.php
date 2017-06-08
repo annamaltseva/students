@@ -5,7 +5,7 @@ $this->title = "Студенты";
 ?>
     <div class="row">
         <div class="col-md-12">
-            <?= Html::a('Добавить', ['create'], ['class' => 'printBtn']) ?>
+            <?= Html::a('Добавить', ['create','group_id' =>$groupID], ['class' => 'printBtn']) ?>
         </div>
     </div>
 

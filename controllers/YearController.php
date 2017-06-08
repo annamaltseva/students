@@ -43,11 +43,22 @@ class YearController extends AdminController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
         } else {
             return $this->render('_form', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->delete()) {
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
         }
     }
     /**

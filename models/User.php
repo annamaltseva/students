@@ -286,7 +286,6 @@ class User extends ActiveRecord implements IdentityInterface
                             ['label' => 'Типы формы контроля', 'url' => ['/checkout-form/index']],
                             ['label' => 'Предметы', 'url' => ['/subject/index']],
                             ['label' => 'Аттестации', 'url' => ['/attestation/index']],
-                            ['label' => 'Методы оценки', 'url' => ['/rating/index']],
                             ['label' => 'Уровни компетенции', 'url' => ['/competence-level/index']],
                         ],
                     ],

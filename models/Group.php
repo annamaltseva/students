@@ -54,6 +54,21 @@ class Group extends AppActiveRecord
         ];
     }
 
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+            if (User::roleCurrentUser()!='admin') {
+
+                $userGroup = new UserGroup();
+                $userGroup->group_id = $this->id;
+                $userGroup->prepod_id = Yii::$app->user->identity->id;
+                $userGroup->save();
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -95,5 +110,20 @@ class Group extends AppActiveRecord
 
         return $query->all();
     }
+    public static function getAllProvider()
+    {
+        if (User::roleCurrentUser()=='admin') {
+            $query = self::find();
+        }
+        else {
+            $query = self::find()
+                ->joinWith([
+                    'userGroups' => function ($query)  {
+                        $query->onCondition(['user_group.prepod_id' => Yii::$app->user->identity->id]);
+                    },
+                ], true, 'INNER JOIN');
+        }
 
+        return $query;
+    }
 }

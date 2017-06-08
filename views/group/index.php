@@ -1,6 +1,7 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 $this->title = "Группы студентов";
 ?>
 <div class="row">
@@ -36,10 +37,24 @@ $this->title = "Группы студентов";
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {delete}',
+            'template' => '{group} {update} {delete}',
             'header' => 'Действия',
-            'contentOptions' => ['style' => 'width:100px;']
+            'contentOptions' => ['style' => 'width:100px;'],
+            'buttons' =>[
+                'group' => function ($url, $model) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-user"></span>',
+                        Url::to([
+                            '/student/index',
+                            'group_id' => $model->id
+                        ]),                            [
+                        'title' => 'Студенты',
+                    ]);
+                }
+
+            ]
         ]
+
 
     ],
     'tableOptions' => [
