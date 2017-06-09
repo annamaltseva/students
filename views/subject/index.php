@@ -18,7 +18,7 @@ $this->title = "Предметы";
         'name',
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{update}',
+            'template' => '{update} {delete}',
             'header' => 'Действия',
             'contentOptions' => ['style' => 'width:80px;']
     ]

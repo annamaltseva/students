@@ -49,6 +49,16 @@ class SubjectController extends AdminController
             ]);
         }
     }
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->delete()) {
+            $session = Yii::$app->session;
+            return $this->redirect($session->get('RETURN_URL'));
+        }
+    }
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
