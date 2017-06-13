@@ -14,7 +14,7 @@ class AdminController extends Controller
     /**
      * @inheritdoc
      */
-  
+
     public function beforeAction($action)
     {
         if (parent::beforeAction($action)) {

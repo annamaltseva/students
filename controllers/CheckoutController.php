@@ -10,7 +10,6 @@ use app\models\Student;
 use app\models\CheckoutCompetence;
 use app\models\CheckoutWork;
 use yii\data\ActiveDataProvider;
-use app\models\Control;
 use yii\web\NotFoundHttpException;
 use Yii;
 
