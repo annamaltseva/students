@@ -41,6 +41,12 @@ $this->title = "Таблица успеваемости";
             'prompt' => 'Выберите успеваемость ...'
         ]);
     ?>
+    <?= $form->field($model, 'view_type')
+        ->dropDownList(ArrayHelper::map(ReportForm::getView(), 'id', 'name'), [
+            'class'=>'form-control',
+            'prompt' => 'Формат'
+        ]);
+    ?>
     <?php
     echo Html::submitButton('Открыть отчет', [
         'class' => 'btn btn-success',

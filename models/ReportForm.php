@@ -13,7 +13,7 @@ class ReportForm extends Model
     public $group_id;
     public $subject_id;
     public $rating_id;
-
+    public $view_type;
 
 
     /**
@@ -23,8 +23,8 @@ class ReportForm extends Model
     {
         return [
 
-            [['year_id' ], 'required'],
-            [['group_id', 'year_id', 'subject_id', 'rating_id'], 'integer'],
+            [['year_id','view_type' ], 'required'],
+            [['group_id', 'year_id', 'subject_id', 'rating_id', 'view_type'], 'integer'],
 
         ];
     }
@@ -40,6 +40,7 @@ class ReportForm extends Model
             'group_id' => 'Группа',
             'subject_id' => 'Предмет',
             'rating_id' => 'Успеваемость',
+            'view_type' => 'Формат',
         ];
     }
 
@@ -52,4 +53,15 @@ class ReportForm extends Model
 
         return $result;
     }
+
+    public static function getView()
+    {
+        $result =[
+            ['id'=>1, 'name' =>'Html'],
+            ['id'=>2, 'name' =>'Excel'],
+        ];
+
+        return $result;
+    }
+
 }
