@@ -31,6 +31,7 @@ return [
             'control_delete',
             'control_rating-quality',
             'control_generate-report',
+            'control_generate-quality-report',
             'range_index',
             'range_create',
             'range_update',
@@ -91,6 +92,7 @@ return [
             'control_update',
             'control_delete',
             'control_generate-report',
+            'control_generate-quality-report',
             'range_index',
             'range_create',
             'range_update',
@@ -185,6 +187,9 @@ return [
         'type' => 2,
     ],
     'control_generate-report' => [
+        'type' => 2,
+    ],
+    'control_generate-quality-report' => [
         'type' => 2,
     ],
     'range_index' => [

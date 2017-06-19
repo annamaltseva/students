@@ -85,6 +85,14 @@ class RbacController extends Controller
         $authManager->addChild($user, $control_generateReport);
         $authManager->addChild($admin, $control_generateReport);
 
+        $control_generateQualityReport  = $authManager->createPermission('control_generate-quality-report');
+        $authManager->add($control_generateQualityReport);
+        $authManager->addChild($user, $control_generateQualityReport);
+        $authManager->addChild($admin, $control_generateQualityReport);
+
+
+
+
         //Range
         $range_index  = $authManager->createPermission('range_index');
         $authManager->add($range_index);

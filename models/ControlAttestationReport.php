@@ -106,7 +106,7 @@ class ControlAttestationReport extends AppActiveRecord
                             where
                             ca.id= '.$controlAttestation->id.'
                             ) t
-                            GROUP BY t.control_attestation_id,t.quantity,t.student_id
+                            GROUP BY t.control_attestation_id,t.checkout_id,t.quantity,t.student_id
                         ) as z
                         GROUP BY z.control_attestation_id, z.student_id';
 
