@@ -1,30 +1,30 @@
 <?php
 return [
-    'login' => [
+    'site_login' => [
         'type' => 2,
     ],
-    'logout' => [
+    'site_logout' => [
         'type' => 2,
     ],
-    'index' => [
+    'site_index' => [
         'type' => 2,
     ],
     'guest' => [
         'type' => 1,
         'ruleName' => 'userGroup',
         'children' => [
-            'login',
-            'logout',
-            'index',
+            'site_login',
+            'site_logout',
+            'site_index',
         ],
     ],
     'user' => [
         'type' => 1,
         'ruleName' => 'userGroup',
         'children' => [
-            'login',
-            'logout',
-            'index',
+            'site_login',
+            'site_logout',
+            'site_index',
             'control_index',
             'control_create',
             'control_update',
@@ -169,6 +169,9 @@ return [
             'teacher-group',
             'teacher_group-create',
             'teacher_group-delete',
+            'teacher_password',
+            'admin_index',
+            'admin_password',
         ],
     ],
     'control_index' => [
@@ -418,6 +421,15 @@ return [
         'type' => 2,
     ],
     'teacher_group-delete' => [
+        'type' => 2,
+    ],
+    'teacher_password' => [
+        'type' => 2,
+    ],
+    'admin_index' => [
+        'type' => 2,
+    ],
+    'admin_password' => [
         'type' => 2,
     ],
 ];

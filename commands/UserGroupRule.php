@@ -19,6 +19,6 @@ class UserGroupRule extends Rule
                 return $group == 'user';
             }
         }
-        return true;
+        return $group == 'guest';
     }
 }

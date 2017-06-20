@@ -17,9 +17,9 @@ class RbacController extends Controller
         $admin  = $authManager->createRole('admin');
 
         // Create simple, based on action{$NAME} permissions
-        $login  = $authManager->createPermission('login');
-        $logout = $authManager->createPermission('logout');
-        $index  = $authManager->createPermission('index');
+        $login  = $authManager->createPermission('site_login');
+        $logout = $authManager->createPermission('site_logout');
+        $index  = $authManager->createPermission('site_index');
 
         // Add permissions in Yii::$app->authManager
         $authManager->add($login);
@@ -469,6 +469,20 @@ class RbacController extends Controller
         $teacher_groupDelete  = $authManager->createPermission('teacher_group-delete');
         $authManager->add($teacher_groupDelete);
         $authManager->addChild($admin, $teacher_groupDelete);
+
+        $teacher_password  = $authManager->createPermission('teacher_password');
+        $authManager->add($teacher_password);
+        $authManager->addChild($admin, $teacher_password);
+
+        //Admin
+        $admin_index  = $authManager->createPermission('admin_index');
+        $authManager->add($admin_index);
+        $authManager->addChild($admin, $admin_index);
+
+        $admin_password  = $authManager->createPermission('admin_password');
+        $authManager->add($admin_password);
+        $authManager->addChild($admin, $admin_password);
+
 
     }
 }

@@ -303,7 +303,14 @@ class User extends ActiveRecord implements IdentityInterface
                             ['label' => 'Отчет по успеваемости','url' => ['/report/index']],
                         ],
                     ],
-                    ['label' => 'Преподаватели', 'url' => ['/teacher/index']],
+                    [
+                        'label' => 'Пользователи',
+                        'items' => [
+                            ['label' => 'Преподаватели', 'url' => ['/teacher/index']],
+                            ['label' => 'Администратор', 'url' => ['/admin/index']],
+                        ],
+                    ],
+
                     [
                         'label' => 'Выйти (' . Yii::$app->user->identity->username . ')',
                         'url' => ['/site/logout'],
